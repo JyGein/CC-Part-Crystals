@@ -1,0 +1,67 @@
+﻿{
+  "status": {
+    "HalfHeal": {
+      "name": "Half Heal",
+      "desc": "Combine 2 to Heal 1 <c=heal>hull</c>."
+    },
+    "QuarterHeal": {
+      "name": "Quarter Heal",
+      "desc": "Combine 2 to gain 1 <c=status>HALF HEAL</c>."
+    },
+    "QuarterEvade": {
+      "name": "Quarter Evade",
+      "desc": "Combine 2 to gain 1 <c=status>HALF EVADE</c>."
+    }
+  },
+  "action": {
+    "AGainPonder": {
+      "title": "Gain Ponder",
+      "draw": "Add <c=boldPink>{{Count}}</c> <c=card>Ponder</c>s to your <c=white>draw pile</c>.",
+      "discard": "Add <c=boldPink>{{Count}}</c> <c=card>Ponder</c>s to your <c=white>discard pile</c>."
+    },
+    "AOverthink": {
+      "title": "Overthink",
+      "desc": "Discard a <c=card>Ponder</c> in hand, or in the draw pile."
+    }
+  },
+  "fragment": {
+    "BlueFragment": {
+      "name": "Blue Fragment",
+      "playerDesc": "Gain 1 <c=status>HALF SHIELD</c> at the start of every turn.",
+      "enemyDesc": "Gain 1 <c=status>HALF SHIELD</c> at the start of every turn."
+    },
+    "RedFragment": {
+      "name": "Red Fragment",
+      "playerDesc": "This <c=part>part</c> <c=action>attacks</c> for 0 and applies <c=status>HALF DAMAGE</c> when your ship <c=action>attacks</c>.",
+      "enemyDesc": "This <c=part>part</c> <c=action>attacks</c> for 1 when this ship <c=action>attacks</c>."
+    },
+    "GreenFragment": {
+      "name": "Green Fragment",
+      "playerDesc": "When this <c=part>part</c> is shot gain 1 <c=status>QUARTER HEAL</c>.",
+      "enemyDesc": "When this <c=part>part</c> is shot <c=status>heal 1</c>."
+    },
+    "YellowFragment": {
+      "name": "Yellow Fragment",
+      "playerDesc": "Gain 1 <c=status>QUARTER EVADE</c> at the end of every turn.",
+      "enemyDesc": "This ship moves 1 space toward you when this <c=part>part</c> is shot."
+    },
+    "MagentaFragment": {
+      "name": "Magenta Fragment",
+      "playerDesc": "Gain 1 <c=status>HALF TEMP SHIELD</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "Gain 1 <c=status>HALF TEMP SHIELD</c> when this <c=part>part</c> is shot."
+    },
+    "CyanFragment": {
+      "name": "Cyan Fragment",
+      "playerDesc": "The enemy gains 1 <c=status>OXIDATION</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "You gain 3 <c=status>OXIDATION</c> when this <c=part>part</c> is shot."
+    },
+    "OrangeFragment": {
+      "name": "Orange Fragment",
+      "playerDesc": "The enemy gains 1 <c=status>HEAT</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "You gain 1 <c=status>HEAT</c> when this <c=part>part</c> is shot."
+    }
+  },
+  "uiShared": {
+    "btnPartManager" : "Part\nManager"
+  }
+}

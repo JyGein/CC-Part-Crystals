@@ -1,0 +1,18 @@
+﻿using Nickel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PartCrystals.dumb_stupid_idiot_strings;
+
+public static class DSIS
+{
+    public static readonly string RandallUniqueName = "Arin.Randall";
+    public static readonly string HalfEvadeUniqueName = "HalfEvade";
+    public static readonly string HalfShieldUniqueName = "HalfShield";
+    public static readonly string HalfTempShieldUniqueName = "HalfTempShield";
+    public static readonly string HalfDamageUniqueName = "HalfDamage";
+    public static readonly string ATPMDS = "AttachedToPartModDataString";
+}

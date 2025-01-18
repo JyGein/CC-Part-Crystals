@@ -1,0 +1,19 @@
+{
+  "UniqueName": "JyGein.PartCrystals",
+  "Version": "0.1.0",
+  "Author": "JyGein",
+  "Description": "Empower your Ship",
+  "RequiredApiVersion": "1.5.7",
+  "EntryPointAssembly": "CC-PartCrystals.dll",
+  "LoadPhase": "AfterDbInit",
+  "Dependencies": [
+    {
+      "UniqueName": "Shockah.Kokoro",
+      "Version": "2.2.0"
+    },
+    {
+      "UniqueName": "Arin.Randall",
+      "Version": "1.0.0"
+    }
+  ]
+}

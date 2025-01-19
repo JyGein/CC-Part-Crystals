@@ -34,8 +34,17 @@ internal class ModEntry : SimpleMod
     public IStatusEntry QuarterHeal;
     public Dictionary<string, ISpriteEntry> FragmentSprites; //NEED TO MAKE
     //public Dictionary<string, ISpriteEntry> ItemSprites; //NEED TO MAKE
-
-    public List<AttachableToPart> TempFragments = new() { new BlueFragment(), new RedFragment(), new GreenFragment(), new YellowFragment(), new MagentaFragment(), new CyanFragment(), new OrangeFragment() };
+    
+    public readonly List<Type> fragmentTypes =
+    [
+            typeof(BlueFragment),
+            typeof(RedFragment),
+            typeof(GreenFragment),
+            typeof(YellowFragment),
+            typeof(MagentaFragment),
+            typeof(CyanFragment),
+            typeof(OrangeFragment)
+    ];
 
     /*
      * The following lists contain references to all types that will be registered to the game.

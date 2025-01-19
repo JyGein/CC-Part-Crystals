@@ -20,7 +20,6 @@
 		<PackageReference Include="EnumByNameSourceGenerator" Version="1.1.1" PrivateAssets="All" ExcludeAssets="runtime" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Actions\" />
 	  <Folder Include="Cards\" />
 	  <Folder Include="Items\" />
 	</ItemGroup>

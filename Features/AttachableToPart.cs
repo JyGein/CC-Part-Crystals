@@ -10,13 +10,12 @@ namespace PartCrystals.Features;
 public abstract class AttachableToPart
 {
     public bool playerOwned = true;
-    public Part? AttachedPart;
     public virtual int GetSize() => 0;
-    public virtual void OnCombatStart(State state, Combat combat) { }
-    public virtual void OnTurnStart(State state, Combat combat) { }
-    public virtual void OnTurnEnd(State state, Combat combat) { }
-    public virtual void OnPartHit(State state, Combat combat) { }
-    public virtual void OnShipShoots(State state, Combat combat) { }
+    public virtual void OnCombatStart(State state, Combat combat, Part part) { }
+    public virtual void OnTurnStart(State state, Combat combat, Part part) { }
+    public virtual void OnTurnEnd(State state, Combat combat, Part part) { }
+    public virtual void OnPartHit(State state, Combat combat, Part part) { }
+    public virtual void OnShipShoots(State state, Combat combat, Part part) { }
     public abstract List<Tooltip> GetTooltips();
     public abstract void Render(G g, Vec restingPosition, bool autoFocus = false);
     public abstract UIKey UIKey();

@@ -8,7 +8,7 @@ namespace PartCrystals.Fragments;
 
 public class MagentaFragment : Fragment
 {
-    public override void OnPartHit(State state, Combat combat)
+    public override void OnPartHit(State state, Combat combat, Part part)
     {
         combat.Queue(new AStatus
         {

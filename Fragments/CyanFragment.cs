@@ -8,9 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class CyanFragment : Fragment
 {
-    public override void OnPartHit(State state, Combat combat)
+    public override void OnPartHit(State state, Combat combat, Part part)
     {
-        combat.Queue(new AStatus
+        combat.QueueImmediate(new AStatus
         {
             status = ModEntry.Instance.KokoroApi.OxidationStatus.Status,
             statusAmount = playerOwned ? 1 : 3,

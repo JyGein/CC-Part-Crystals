@@ -20,10 +20,16 @@ public class Fragment : AttachableToPart
 {
     public int v = Mutil.NextRandInt();
     public static readonly UK FragmentUK = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
-
-    public Vec? animation;
-
-    public Vec lastScreenPos;
+    public static Dictionary<Type, string> FragmentColors =
+    new() {
+        {typeof(BlueFragment), "4DBBF4"},
+        {typeof(CyanFragment), "6DFFE2"},
+        {typeof(GreenFragment), "38FF94"},
+        {typeof(MagentaFragment),"F26BFF"},
+        {typeof(OrangeFragment), "fc872d"},
+        {typeof(RedFragment), "FF6666"},
+        {typeof(YellowFragment), "FFE25B"}
+    };
 
     public override int GetSize() => 1;
 
@@ -76,20 +82,7 @@ public class Fragment : AttachableToPart
         bool autoFocus2 = autoFocus;
         Box box = g.Push(key, rect, null, autoFocus2);
         Vec vec = box.rect.xy;
-        if (animation.HasValue)
-        {
-            animation = Mutil.LerpDelta(animation.Value, vec, 10.0, g.dt);
-            if ((vec - animation.Value).len() < 0.5)
-            {
-                animation = null;
-            }
-            else
-            {
-                vec = animation.Value;
-            }
-        }
         Spr spr = GetSprite();
-        lastScreenPos = vec;
         Vec vec2 = vec.round();
         Draw.Sprite(spr, vec2.x - 1.0, vec2.y - 1.0);
         if (box.IsHover())

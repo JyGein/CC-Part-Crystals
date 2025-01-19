@@ -86,7 +86,7 @@ internal sealed class PartialStatusManager
                 return;
 
         __instance.QueueImmediate([
-            new AHurt() { timer = 0, targetPlayer = true, hurtAmount = toAdd, hurtShieldsFirst = true },
+            new AHeal() { timer = 0, targetPlayer = true, healAmount = toAdd },
                 new AStatus() { targetPlayer = true, status = partialStatus, statusAmount = -toAdd * 2 },
             ]);
     }
@@ -109,7 +109,7 @@ internal sealed class PartialStatusManager
                 return;
 
         __instance.QueueImmediate([
-            new AHurt() { timer = 0, targetPlayer = false, hurtAmount = toAdd, hurtShieldsFirst = true },
+            new AHeal() { timer = 0, targetPlayer = false, healAmount = toAdd },
                 new AStatus() { targetPlayer = false, status = partialStatus, statusAmount = -toAdd * 2 },
             ]);
     }

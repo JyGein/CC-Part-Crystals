@@ -4,7 +4,8 @@ A Crystal Fragment attaches to a ship part to give a small buff
 Can mix and match Fragments up to 4 per part
 Can combine 2 Fragments to make an "item" at the shop (in addtion to other shop things)
 Items will appear in the codex
-Items count as 2 Fragments
+Items count as 2 Fragments (so 2 items, 4 fragments, or 1 item 2 fragments per part)
+Items still gain the benefits of the fragments used to make them
 At start of run gain 2 Fragments
 Can swap Fragments when out of combat
 Gain 2 Fragments whenever you select an artifact (node, boss, elite)
@@ -37,8 +38,8 @@ GC - Oxidize = 0 and -1 Corrode when part is shot
 GO - Heat = 0 and +1 Serenity when part is shot
 YM - +5 Evade When this part takes hull damage					-
 YC - When the enemy moves they gain 1 Oxidize
-YO - +2 Evade +2 Heat at start of turn
-MC - When part is shot while having Temp Shield 4 Oxidize enemy	-
+YO - +2 Evade +2 Heat at start of turn							-
+MC - When part is shot while having Temp Shield 4 Oxidize enemy	
 MO - When you overheat +5 Temp Shield							-
 CO - Hull damage opponent 1 when part is shot
 BB - Part becomes Armored
@@ -55,9 +56,4 @@ FORMATS:
 Fragments:
 Color - Player Effect - Enemy Effect
 
-Effect Template:
-Cost, Properties Effect
-
 "Thing" = temp name
-
-New Thing (description)

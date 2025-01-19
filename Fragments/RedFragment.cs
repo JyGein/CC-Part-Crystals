@@ -9,7 +9,7 @@ namespace PartCrystals.Fragments;
 
 public class RedFragment : Fragment
 {
-    public override void OnShipShoots(State state, Combat combat)
+    public override void OnShipShoots(State state, Combat combat, Part part)
     {
         combat.QueueImmediate(new AAttack
         {
@@ -17,7 +17,7 @@ public class RedFragment : Fragment
             status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
             statusAmount = playerOwned ? 1 : default,
             targetPlayer = !playerOwned,
-            fromX = ModEntry.GetPartX(AttachedPart!, state, combat) ?? 0,
+            fromX = ModEntry.GetPartX(part, state, combat) ?? 0,
             fast = true
         });
     }

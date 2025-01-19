@@ -8,7 +8,7 @@ namespace PartCrystals.Fragments;
 
 public class GreenFragment : Fragment
 {
-    public override void OnPartHit(State state, Combat combat)
+    public override void OnPartHit(State state, Combat combat, Part part)
     {
         combat.QueueImmediate(playerOwned ?
             new AStatus

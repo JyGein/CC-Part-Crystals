@@ -8,7 +8,7 @@ namespace PartCrystals.Fragments;
 
 public class YellowFragment : Fragment
 {
-    public override void OnTurnEnd(State state, Combat combat)
+    public override void OnTurnEnd(State state, Combat combat, Part part)
     {
         if (!playerOwned) return;
         combat.QueueImmediate(new AStatus
@@ -19,7 +19,7 @@ public class YellowFragment : Fragment
         });
     }
 
-    public override void OnPartHit(State state, Combat combat)
+    public override void OnPartHit(State state, Combat combat, Part part)
     {
         if (playerOwned) return;
         combat.QueueImmediate(new AMove

@@ -8,7 +8,7 @@ namespace PartCrystals.Fragments;
 
 public class BlueFragment : Fragment
 {
-    public override void OnTurnStart(State state, Combat combat)
+    public override void OnTurnStart(State state, Combat combat, Part part)
     {
         combat.Queue(new AStatus
         {

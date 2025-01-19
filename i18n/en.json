@@ -14,8 +14,8 @@
     }
   },
   "action": {
-    "AGainPonder": {
-      "title": "Gain Ponder",
+    "AGainFragments": {
+      "title": "Gain Fragments",
       "draw": "Add <c=boldPink>{{Count}}</c> <c=card>Ponder</c>s to your <c=white>draw pile</c>.",
       "discard": "Add <c=boldPink>{{Count}}</c> <c=card>Ponder</c>s to your <c=white>discard pile</c>."
     },
@@ -61,7 +61,15 @@
       "enemyDesc": "You gain 1 <c=status>HEAT</c> when this <c=part>part</c> is shot."
     }
   },
-  "uiShared": {
-    "btnPartManager" : "Part\nManager"
+  "uiText": {
+    "btnPartManager": "Part\nManager",
+    "fragmentReward": {
+      "title": "TAKE SOME FRAGMENTS",
+      "info": "Fragments are attached to ship parts and empower your capabilities.\nYou can have up to 4 on a part."
+    }
+  },
+  "dialogue": {
+    "FragmentSequence": "CRYSTAL FRAGMENTATION DETECTED!!! >>> PLEASE SELECT BOOT OPTION",
+    "FragmentSequence_Option": "Gain <c={{firstColor}}>{{first}}</c> and <c={{secondColor}}>{{second}}</c>."
   }
 }

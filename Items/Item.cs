@@ -16,44 +16,34 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PartCrystals.Fragments;
 
-public class Fragment : AttachableToPart
+public class Item : AttachableToPart
 {
     public int v = Mutil.NextRandInt();
-    public static readonly UK FragmentUK = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
-    public static Dictionary<Type, string> FragmentColors =
-    new() {
-        {typeof(BlueFragment), "4DBBF4"},
-        {typeof(CyanFragment), "6DFFE2"},
-        {typeof(GreenFragment), "38FF94"},
-        {typeof(MagentaFragment),"F26BFF"},
-        {typeof(OrangeFragment), "fc872d"},
-        {typeof(RedFragment), "FF6666"},
-        {typeof(YellowFragment), "FFE25B"}
-    };
-
-    public override int GetSize() => 1;
-
+    public static readonly UK ItemUK = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
+    public override int GetSize() => 2;
+    public List<Type> GetBaseFragmentTypes() => [];
+    public List<Type> baseFragmentTypes = [];
     public virtual List<Tooltip>? GetExtraTooltips()
         => null;
 
-    public Spr GetSprite()
+    public List<Spr> GetSprites()
     {
-        return ModEntry.Instance.FragmentSprites[Key()].Sprite;
+        return baseFragmentTypes.Select(f => ModEntry.Instance.ItemSprites[f.Name].Sprite).ToList();
     }
 
     public override string Name()
     {
-        return ModEntry.Instance.Localizations.Localize(["fragment", Key(), "name"]);
+        return ModEntry.Instance.Localizations.Localize(["item", Key(), "name"]);
     }
 
     public override string Desc()
     {
-        return ModEntry.Instance.Localizations.Localize(["fragment", Key(), playerOwned ? "playerDesc" : "enemyDesc"]);
+        return ModEntry.Instance.Localizations.Localize(["item", Key(), playerOwned ? "playerDesc" : "enemyDesc"]);
     }
 
     public override UIKey UIKey()
     {
-        return new UIKey(FragmentUK, v, Key());
+        return new UIKey(ItemUK, v, Key());
     }
 
     public override List<Tooltip> GetTooltips()
@@ -61,11 +51,17 @@ public class Fragment : AttachableToPart
         List<Tooltip> list = new()
         {
             new TTDivider(),
-            new TTText($"<c=artifact>{Name().ToUpper()}</c>\n{Desc()}")
+            new TTText($"<c={Fragment.FragmentColors[baseFragmentTypes[0]]}>{Name().ToUpper()[0]}</c><c={Fragment.FragmentColors[baseFragmentTypes[1]]}>{Name().ToUpper()[1]}</c>\n{Desc()}")
         };
         if (GetExtraTooltips() != null)
         {
             list.AddRange(GetExtraTooltips()!);
+        }
+        foreach(Type type in baseFragmentTypes)
+        {
+            Fragment f = (Fragment)AccessTools.CreateInstance(type);
+            f.playerOwned = playerOwned;
+            list.AddRange(f.GetTooltips());
         }
         return list;
     }
@@ -73,16 +69,17 @@ public class Fragment : AttachableToPart
     public override void Render(G g, Vec restingPosition, bool autoFocus = false, OnMouseDown? onMouseDown = null, Color? color = null)
     {
         UIKey? key = UIKey();
-        Rect? rect = new Rect(0.0, 0.0, 5.0, 7.0) + restingPosition;
+        Rect? rect = new Rect(0.0, 0.0, 11.0, 7.0) + restingPosition;
         bool autoFocus2 = autoFocus;
         Box box = g.Push(key, rect, null, autoFocus2, onMouseDown: onMouseDown);
         Vec vec = box.rect.xy;
-        Spr spr = GetSprite();
+        List<Spr> sprs = GetSprites();
         Vec vec2 = vec.round();
-        Draw.Sprite(spr, vec2.x, vec2.y, color: color);
+        Draw.Sprite(sprs[0], vec2.x, vec2.y, color: color);
+        Draw.Sprite(sprs[1], vec2.x, vec2.y, true, true, color: color);
         if (box.IsHover())
         {
-            Vec pos = vec2 + new Vec(7.0);
+            Vec pos = vec2 + new Vec(13.0);
             g.tooltips.Add(pos, GetTooltips().Skip(1));
         }
         g.Pop();

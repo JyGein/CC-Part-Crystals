@@ -6,19 +6,16 @@ using System.Threading.Tasks;
 
 namespace PartCrystals.Fragments;
 
-public class BlueFragment : Fragment
+public class BG : Item
 {
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
-        combat.QueueImmediate(new AStatus
+        if (damageDone.hitHull)
         {
-            status = ModEntry.Instance.HalfShield.Status,
-            statusAmount = 1,
-            targetPlayer = playerOwned,
-            timer = 0
-        });
+            combat.QueueImmediate(new AHullMax { amount = 1, timer = 0 });
+        }
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => StatusMeta.GetTooltips(ModEntry.Instance.HalfShield.Status, 1);
+        => [new TTGlossary("action.hullMax", 1)];
 }

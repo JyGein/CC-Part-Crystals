@@ -15,6 +15,7 @@ using PartCrystals.Fragments;
 using Microsoft.Xna.Framework;
 using System.Drawing;
 using PartCrystals.Actions;
+using System.Xml.Serialization;
 
 namespace PartCrystals.Features;
 
@@ -53,6 +54,10 @@ internal sealed class AttachableToPartManager
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Events_BootSequence_Postfix))
         );
         ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(Events), nameof(Events.NewShop)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Events_NewShop_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
             original: AccessTools.DeclaredMethod(typeof(DB), nameof(DB.SetLocale)),
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(DB_SetLocale_Postfix))
         );
@@ -69,10 +74,20 @@ internal sealed class AttachableToPartManager
                 ],
             choiceFunc = "FragmentSequence" + ModEntry.Instance.Package.Manifest.UniqueName
         };
-        DB.eventChoiceFns = DB.eventChoiceFns.Concat((from mi in typeof(PartCrystalEvents).GetMethods()
-                                 let p = mi.GetParameters()
-                                 where mi.IsStatic && p.Length == 1 && p[0].ParameterType == typeof(State) && mi.ReturnType == typeof(List<Choice>)
-                                 select mi).ToDictionary((MethodInfo info) => info.Name + ModEntry.Instance.Package.Manifest.UniqueName, (MethodInfo info) => info)).ToDictionary();
+        DB.eventChoiceFns = DB.eventChoiceFns
+            .Concat(
+                (from mi in typeof(PartCrystalEvents).GetMethods()
+                    let p = mi.GetParameters()
+                    where mi.IsStatic && 
+                        p.Length == 1 && 
+                        p[0].ParameterType == typeof(State) && 
+                        mi.ReturnType == typeof(List<Choice>)
+                    select mi
+                ).ToDictionary(
+                    info => info.Name + ModEntry.Instance.Package.Manifest.UniqueName, 
+                    info => info
+                )
+            ).ToDictionary();
         ModEntry.Instance.Harmony.Patch(
             original: AccessTools.DeclaredMethod(typeof(State), nameof(State.PopulateRun)),
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(State_PopulateRun_Postfix))
@@ -97,13 +112,53 @@ internal sealed class AttachableToPartManager
             original: AccessTools.DeclaredMethod(typeof(AEnemyTurnAfter), nameof(AEnemyTurnAfter.Begin)),
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AEnemyTurnAfter_Begin_Postfix))
         );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(Ship), nameof(Ship.NormalDamage)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Ship_NormalDamage_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(Ship), nameof(Ship.NormalDamage)),
+            prefix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Ship_NormalDamage_Prefix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(Combat), nameof(Combat.Make)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Combat_Make_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(AAttack), nameof(AAttack.Begin)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AAttack_Begin_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(State), nameof(State.SeedRand)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(State_SeedRand_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(MapArtifact), nameof(MapArtifact.MakeRoute)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(MapArtifact_MakeRoute_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(AAttack), nameof(AAttack.Begin)),
+            prefix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AAttack_Begin_Prefix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(Ship), nameof(Ship.DirectHullDamage)),
+            prefix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Ship_DirectHullDamage_Prefix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(AMove), nameof(AMove.Begin)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AMove_Begin_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(AOverheat), nameof(AOverheat.Begin)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AOverheat_Begin_Postfix))
+        );
     }
 
     private static void MapRoute_Render_Postfix(MapRoute __instance, G g)
     {
         if (g.state.route == __instance)
         {
-            Vec localV = new Vec(100.0, 230.0);
+            Vec localV = new Vec(100.0 + (g.state.ship.parts.Count > 5 ? (g.state.ship.parts.Count - 5) * 16 : 0 ), 230.0);
             UIKey key = OpenShipManagerButton;
             string text = ModEntry.Instance.Localizations.Localize(["uiText", "btnPartManager"]);
             Color? textColor = Colors.textMain;
@@ -126,7 +181,10 @@ internal sealed class AttachableToPartManager
     private static void Ship_RenderPartUI_Postfix(G g, Combat? combat, Part part, int localX, string keyPrefix, bool isPreview)
     {
         AddAttachableTTs(g, part, localX, keyPrefix);
-        if(g.state.route is MapRoute && g.state.routeOverride is ShipUpgrades shipUpgrades)
+        ShipUpgrades? shipUpgrades = null;
+        if (g.state.route is MapRoute && g.state.routeOverride is ShipUpgrades) shipUpgrades = (ShipUpgrades)g.state.routeOverride;
+        else if (g.state.route is Dialogue dialogue && dialogue.routeOverride is ShipUpgrades) shipUpgrades = (ShipUpgrades)dialogue.routeOverride;
+        if (shipUpgrades != null)
         {
             if (shipUpgrades.GetHeldAttachable() != null)
             {
@@ -137,19 +195,36 @@ internal sealed class AttachableToPartManager
             int num = 0;
             foreach(AttachableToPart attachable in attachables)
             {
-                if (attachable is Fragment)
+                if (attachable is Fragment fragment)
                 {
                     Vec vec = new(localX * 16);
                     int num1 = 11;
                     vec.y += num1;
                     Rect rect = new(vec.x - 1.0 + 3 + (num % 2 * 6), vec.y + (num/2 * 8), 5, 7);
-                    Box box = g.Push(attachable.UIKey(), rect, onMouseDown: shipUpgrades);
+                    Box box = g.Push(fragment.UIKey(), rect, onMouseDown: shipUpgrades);
                     Vec pos = box.rect.xy + new Vec(5 + 2);
-                    if (box.IsHover()) g.tooltips.Add(pos, attachable.GetTooltips().Where(tt => tt is not TTDivider));
+                    if (box.IsHover()) g.tooltips.Add(pos, fragment.GetTooltips().Skip(1));
                     num++;
-                    Spr id = attachable.GetSprite();
+                    Spr id = fragment.GetSprite();
                     Vec xy = box.rect.xy;
                     Draw.Sprite(id, xy.x, xy.y);
+                    g.Pop();
+                }
+                else if (attachable is Item item)
+                {
+                    Vec vec = new(localX * 16);
+                    int num1 = 11;
+                    vec.y += num1;
+                    Rect rect = new(vec.x - 1.0 + 3 + (num % 2 * 6), vec.y + (num / 2 * 8), 11, 7);
+                    Box box = g.Push(item.UIKey(), rect, onMouseDown: shipUpgrades);
+                    Vec pos = box.rect.xy + new Vec(5 + 2);
+                    if (box.IsHover()) g.tooltips.Add(pos, item.GetTooltips().Skip(1));
+                    num += 2;
+                    Vec xy = box.rect.xy;
+                    List<Spr> sprs = item.GetSprites();
+                    Vec vec2 = xy.round();
+                    Draw.Sprite(sprs[0], vec2.x, vec2.y);
+                    Draw.Sprite(sprs[1], vec2.x, vec2.y, true, true);
                     g.Pop();
                 }
             }
@@ -167,11 +242,11 @@ internal sealed class AttachableToPartManager
 
     private static void ShipUpgrades_Render_Postfix(ShipUpgrades __instance, G g)
     {
-        if (g.state.route is not MapRoute || __instance.actionQueue.Count > 0 || __instance.completedActions.Count > 0) return;
+        if ((g.state.route is not MapRoute || __instance.actionQueue.Count > 0 || __instance.completedActions.Count > 0) && !__instance.GetIsActuallyCrafting()) return;
 
         List<AttachableToPart> attachables = g.state.GetPlayerAttachables();
         int startX = g.mg.PIX_W;
-        attachables.ForEach(attachable => startX -= attachable is Fragment ? 7 : 13);
+        attachables.ForEach(attachable => startX -= attachable is Fragment ? 9 : 15);
         startX /= 2;
         startX -= 1;
         int num = 0;
@@ -181,14 +256,8 @@ internal sealed class AttachableToPartManager
             Vec vec = new(startX + num, 60);
             int num3 = attachable is Fragment ? 5 : 11;
             num += num3 + 4;
-            Rect rect = new Rect(0.0, 0.0, num3, 7) + vec;
-            Box box = g.Push(key, rect, onMouseDown: __instance);
-            Spr id = attachable.GetSprite();
             Color? color = attachable == __instance.GetHeldAttachable() ? Colors.smoke[0] : null;
-            Draw.Sprite(id, vec.x, vec.y, color: color);
-            Vec pos = box.rect.xy + new Vec(num3+2);
-            if (box.IsHover()) g.tooltips.Add(pos, attachable.GetTooltips().Where(tt => tt is not TTDivider));
-            g.Pop();
+            attachable.Render(g, vec, onMouseDown:__instance, color: color);
         }
     }
 
@@ -196,27 +265,41 @@ internal sealed class AttachableToPartManager
     {
         if (!b.key.HasValue) return;
         UIKey key = b.key.Value;
-        if (key.k == StableUK.part && __instance.GetHeldAttachable() != null)
+        if (key.k == StableUK.part && __instance.GetHeldAttachable() != null && !__instance.GetIsActuallyCrafting())
         {
             AttachableToPart attachable = __instance.GetHeldAttachable()!;
             Part part = g.state.ship.parts[key.v];
             if (part.GetAttachables().Size() + attachable.GetSize() <= 4 && part.type != PType.empty)
             {
                 __instance.SetHeldAttachable(null);
-                g.state.SetPlayerAttachables(g.state.GetPlayerAttachables().Where((a) => a != attachable).ToList());
+                g.state.SetPlayerAttachables(g.state.GetPlayerAttachables().Where(a => a != attachable).ToList());
                 part.SetAttachables([.. part.GetAttachables(), attachable]);
+                attachable.OnPartAttached(g.state, part);
             }
         }
-        if (key.k == Fragment.FragmentUK)
+        if (key.k == Fragment.FragmentUK || key.k == Item.ItemUK)
         {
-            if(__instance.GetHeldAttachable() != null && __instance.GetHeldAttachable()!.UIKey() == key) __instance.SetHeldAttachable(null);
+            if (__instance.GetIsActuallyCrafting() && key.k == Item.ItemUK) return;
+            if (__instance.GetHeldAttachable() != null && __instance.GetHeldAttachable()!.UIKey() == key) __instance.SetHeldAttachable(null);
+            else if (__instance.GetIsActuallyCrafting() && __instance.GetHeldAttachable() != null)
+            {
+                Fragment fragment1 = (Fragment)(g.state.GetPlayerAttachables().FirstOrDefault(f => f.UIKey() == __instance.GetHeldAttachable()!.UIKey()) ?? g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == __instance.GetHeldAttachable()!.UIKey()) > 0).GetAttachables().FirstOrDefault(f => f.UIKey() == key)!);
+                Fragment fragment2 = (Fragment)(g.state.GetPlayerAttachables().FirstOrDefault(f => f.UIKey() == key) ?? g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == key) > 0).GetAttachables().FirstOrDefault(f => f.UIKey() == key)!);
+                Item item = (Item)AccessTools.CreateInstance(ModEntry.Instance.fragmentFragmentToItem[fragment1.GetType()][fragment2.GetType()]);
+                item.baseFragmentTypes = [fragment1.GetType(), fragment2.GetType()];
+                g.state.SetPlayerAttachables([.. g.state.GetPlayerAttachables().Where(a => a.UIKey() != key && a.UIKey() != __instance.GetHeldAttachable()!.UIKey()), item]);
+                g.state.ship.parts.ForEach(p => p.SetAttachables(p.GetAttachables().Where(a => a.UIKey() != key && a.UIKey() != __instance.GetHeldAttachable()!.UIKey()).ToList()));
+                g.state.route.SetHasCraftedHere(true);
+                g.CloseRoute(__instance);
+            }
             else if (g.state.GetPlayerAttachables().Any(a => a.UIKey() == key)) __instance.SetHeldAttachable(g.state.GetPlayerAttachables().First(a => a.UIKey() == key));
             else
             {
-                Part part = g.state.ship.parts.Where(p => p.GetAttachables().Where(a => a.UIKey() == key).Count() > 0).First();
-                AttachableToPart attachable = part.GetAttachables().Where(a => a.UIKey() == key).First();
+                Part part = g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == key) > 0);
+                AttachableToPart attachable = part.GetAttachables().First(a => a.UIKey() == key);
                 g.state.SetPlayerAttachables([.. g.state.GetPlayerAttachables(), attachable]);
                 part.SetAttachables(part.GetAttachables().Where(a => a != attachable).ToList());
+                attachable.OnPartDetached(g.state, part);
             }
         }
     }
@@ -260,6 +343,17 @@ internal sealed class AttachableToPartManager
         }
     }
 
+    private static void Events_NewShop_Postfix(State s, ref List<Choice> __result)
+    {
+        if (s.GetPlayerAttachables().Count(a => a is Fragment) + s.ship.parts.SelectMany(p => p.GetAttachables()).Count(a => a is Fragment) < 2 || s.route.GetHasCraftedHere()) return;
+        __result.Add(new Choice
+        {
+            label = ModEntry.Instance.Localizations.Localize(["dialogue", "CraftanItem"]),
+            key = "NewShop",
+            actions = { new AItemCrafting() }
+        });
+    }
+
     private static void DB_SetLocale_Postfix(string locale, bool useHiRes)
     {
         DB.currentLocale.strings.TryAdd($"FragmentSequence{ModEntry.Instance.Package.Manifest.UniqueName}:beb77013", ModEntry.Instance.Localizations.Localize(["dialogue", "FragmentSequence"]));
@@ -285,16 +379,113 @@ internal sealed class AttachableToPartManager
     }
 
     private static void AStartPlayerTurn_Begin_Postfix(State s, Combat c)
-        => s.ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnStart(s, c, p)));
+    {
+        s.ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnStart(s, c, p)));
+        c.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnOtherShipTurnStart(s, c, p)));
+    }
 
     private static void AEnemyTurn_Begin_Postfix(State s, Combat c)
-        => c.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnStart(s, c, p)));
+    {
+        c.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnStart(s, c, p)));
+        s.ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnOtherShipTurnStart(s, c, p)));
+    }
 
     private static void AAfterPlayerTurn_Begin_Postfix(State s, Combat c)
         => s.ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnEnd(s, c, p)));
 
     private static void AEnemyTurnAfter_Begin_Postfix(State s, Combat c)
         => c.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnEnd(s, c, p)));
+
+    private static void Ship_NormalDamage_Postfix(State s, Combat c, int? maybeWorldGridX, DamageDone __result, Ship __instance)
+    {
+        if(maybeWorldGridX.HasValue)
+        {
+            Part? part = __instance.GetPartAtWorldX(maybeWorldGridX.GetValueOrDefault())!;
+            part?.GetAttachables().ForEach(a => a.OnPartHit(s, c, part, __result));
+
+            if (!c.stuff.TryGetValue(maybeWorldGridX.GetValueOrDefault(), out _))
+            {
+                Ship attackingShip = s.ship == __instance ? c.otherShip : s.ship;
+                Part? part2 = attackingShip.GetPartAtWorldX(maybeWorldGridX.GetValueOrDefault());
+                part2?.GetAttachables().ForEach(a => a.OnPartDamages(s, c, part2, __result, __instance));
+            }
+        }
+    }
+
+    private static void Ship_NormalDamage_Prefix(State s, Combat c, int incomingDamage, int? maybeWorldGridX, Ship __instance)
+    {
+        if (maybeWorldGridX.HasValue)
+        {
+            Part? part = __instance.GetPartAtWorldX(maybeWorldGridX.GetValueOrDefault())!;
+            part?.GetAttachables().ForEach(a => a.BeforePartHit(s, c, part, incomingDamage));
+        }
+    }
+
+    private static void Combat_Make_Postfix(State s, bool doForReal, Combat __result)
+    {
+        if(doForReal)
+        {
+            __result.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnCombatStart(s, __result, p)));
+            s.ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnCombatStart(s, __result, p)));
+        }
+    }
+
+    private static void AAttack_Begin_Postfix(AAttack __instance, G g, State s, Combat c)
+    {
+        Ship ship = __instance.targetPlayer ? c.otherShip : s.ship;
+        if (!__instance.fromDroneX.HasValue && !__instance.fromX.HasValue && !__instance.multiCannonVolley)
+        {
+            ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnShipShoots(s, c, p)));
+        }
+        if (__instance.fromX.HasValue || ship.GetPartTypeCount(PType.cannon) == 1)
+        {
+            int? x = __instance.GetFromX(s, c);
+            Part? part = ship.GetPartAtLocalX(x.GetValueOrDefault());
+            part?.GetAttachables().ForEach(a => a.OnPartAttacks(s, c, part));
+        }
+    }
+
+    private static void State_SeedRand_Postfix(State __instance, uint seed)
+        => __instance.SetrngFragmentOfferings(new Rand(seed).Offshoot());
+
+    private static void MapArtifact_MakeRoute_Postfix(State s)
+        => s.rewardsQueue.Add(new AFragmentOffering());
+
+    private static void AAttack_Begin_Prefix(AAttack __instance, G g, State s, Combat c)
+    {
+        int? x = __instance.GetFromX(s, c);
+        Ship ship = __instance.targetPlayer ? c.otherShip : s.ship;
+        if (x.HasValue || ship.GetPartTypeCount(PType.cannon) == 1)
+        {
+            Part? part = ship.GetPartAtLocalX(x.GetValueOrDefault());
+            if (part != null)
+            {
+                part.GetAttachables().ForEach(a => a.AlterAttackFromPart(s, c, part, __instance));
+            }
+        }
+    }
+
+    private static void Ship_DirectHullDamage_Prefix(Ship __instance, State s, Combat c, ref int amt)
+    {
+        foreach (Part part in __instance.parts)
+        {
+            foreach (AttachableToPart attachable in part.GetAttachables())
+            {
+                attachable.AlterHullDamage(s, c, __instance, ref amt);
+            }
+        }
+    }
+
+    private static void AMove_Begin_Postfix(AMove __instance, G g, State s, Combat c)
+    {
+        Ship ship = __instance.targetPlayer ? s.ship : c.otherShip;
+        ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnShipMoves(s, c, p)));
+        Ship ship2 = __instance.targetPlayer ? c.otherShip : s.ship;
+        ship2.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnOtherShipMoves(s, c, p)));
+    }
+
+    private static void AOverheat_Begin_Postfix(AOverheat __instance, G g, State s, Combat c)
+        => (__instance.targetPlayer ? s.ship : c.otherShip).parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnShipOverheats(s, c, p)));
 }
 
 internal static class AttachableToPartExt
@@ -311,10 +502,22 @@ internal static class AttachableToPartExt
         => ModEntry.Instance.Helper.ModData.GetOptionalModData<AttachableToPart>(state, DSIS.ATPMDS);
     public static void SetHeldAttachable(this ShipUpgrades state, AttachableToPart? attachable)
         => ModEntry.Instance.Helper.ModData.SetOptionalModData<AttachableToPart>(state, DSIS.ATPMDS, attachable);
+    public static Rand GetrngFragmentOfferings(this State state)
+        => ModEntry.Instance.Helper.ModData.GetOptionalModData<Rand>(state, DSIS.rngFragmentOfferings) ?? new();
+    public static void SetrngFragmentOfferings(this State state, Rand rand)
+        => ModEntry.Instance.Helper.ModData.SetOptionalModData<Rand>(state, DSIS.rngFragmentOfferings, rand);
     public static int Size(this List<AttachableToPart> attachables)
     {
         int num = 0;
         foreach(AttachableToPart attachable in attachables) num += attachable.GetSize();
         return num;
     }
+    public static bool GetIsActuallyCrafting(this ShipUpgrades shipUpgrades)
+        => ModEntry.Instance.Helper.ModData.GetOptionalModData<bool>(shipUpgrades, DSIS.ShipUpgradesIsActuallyCrafting) ?? false;
+    public static void SetIsActuallyCrafting(this ShipUpgrades shipUpgrades, bool b)
+        => ModEntry.Instance.Helper.ModData.SetOptionalModData<bool>(shipUpgrades, DSIS.ShipUpgradesIsActuallyCrafting, b);
+    public static bool GetHasCraftedHere(this Route route)
+        => ModEntry.Instance.Helper.ModData.GetOptionalModData<bool>(route, DSIS.HasCraftedHere) ?? false;
+    public static void SetHasCraftedHere(this Route route, bool b)
+        => ModEntry.Instance.Helper.ModData.SetOptionalModData<bool>(route, DSIS.HasCraftedHere, b);
 }

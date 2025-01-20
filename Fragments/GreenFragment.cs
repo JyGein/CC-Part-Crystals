@@ -8,19 +8,21 @@ namespace PartCrystals.Fragments;
 
 public class GreenFragment : Fragment
 {
-    public override void OnPartHit(State state, Combat combat, Part part)
+    public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
         combat.QueueImmediate(playerOwned ?
             new AStatus
             {
                 status = ModEntry.Instance.QuarterHeal.Status,
                 statusAmount = 1,
-                targetPlayer = true
+                targetPlayer = true,
+                timer = 0
             } :
             new AHeal
             {
                 healAmount = 1,
-                targetPlayer = false
+                targetPlayer = false,
+                timer = 0
             });
     }
 

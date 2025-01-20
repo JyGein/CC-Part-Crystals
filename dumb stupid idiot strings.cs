@@ -15,4 +15,7 @@ public static class DSIS
     public static readonly string HalfTempShieldUniqueName = "HalfTempShield";
     public static readonly string HalfDamageUniqueName = "HalfDamage";
     public static readonly string ATPMDS = "AttachedToPartModDataString";
+    public static readonly string rngFragmentOfferings = "rngFragmentOfferings";
+    public static readonly string ShipUpgradesIsActuallyCrafting = "ShipUpgradesIsActuallyCrafting";
+    public static readonly string HasCraftedHere = "HasCraftedHere";
 }

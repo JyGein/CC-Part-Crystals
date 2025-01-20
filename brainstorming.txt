@@ -12,13 +12,13 @@ Gain 2 Fragments whenever you select an artifact (node, boss, elite)
 Enemies will be fitted out with Fragments and items
 
 Fragments:
-Blue(B)		- +1/2 Shield at start of turn
+Blue(B)		- +1/2 Shield when part is shot
 Red(R)		- Fires 1/2 shot when Shooting 		- Additional Shoot for 1 when shooting
 Green(G)	- Heal 1/4 when part is shot		- Heal 1 when part is shot
 Yellow(Y)	- +1/4 Evade at end of turn 		- Move toward player when part is shot
-Magenta(M)	- +1 Temp Shield when part is shot
-Cyan(C)		- 1 Oxidize enemy when part is shot - 3 Oxidize player when shot
-Orange(O)	- 1 Heat opponent when part is shot
+Magenta(M)	- +1/4 Temp Shield at start of turn
+Cyan(C)		- 2 Oxidize enemy when part is shot - 3 Oxidize player when shot
+Orange(O)	- 3 Heat opponent when part is shot
 
 Items:
 BR - Attacks from this part pierce
@@ -36,19 +36,19 @@ GY - Heal 1/4 health each movement
 GM - Heal 1/4 and +5 Temp Shield when part is shot
 GC - Oxidize = 0 and -1 Corrode when part is shot
 GO - Heat = 0 and +1 Serenity when part is shot
-YM - +5 Evade When this part takes hull damage					-
-YC - When the enemy moves they gain 1 Oxidize
-YO - +2 Evade +2 Heat at start of turn							-
+YM - +3 Evade & +5 Temp Shield When this part takes hull damage	- +5 Temp Shield and engine lock player when this part takes hull damage
+YC - When the enemy moves they gain 2 Oxidize
+YO - +2 Evade +2 Heat at start of turn							- Engine stall player at start of turn
 MC - When part is shot while having Temp Shield 4 Oxidize enemy	
-MO - When you overheat +5 Temp Shield							-
+MO - When you overheat +5 Temp Shield
 CO - Hull damage opponent 1 when part is shot
 BB - Part becomes Armored
 RR - Shots from this part deal +1 Damage
 GG - +3 Max health while applied
 YY - Gain 1 autododge right at start of turn
 MM - When part is shot all parts become Armored for the turn
-CC - 2 Oxidize opponent when part is shot
-OO - Damage opponent 1 when part is shot
+CC - 3 Oxidize opponent when part is shot
+OO - Damage opponent 2 when part is shot
 
 
 FORMATS:

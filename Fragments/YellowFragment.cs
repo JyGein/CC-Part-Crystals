@@ -15,17 +15,19 @@ public class YellowFragment : Fragment
         {
             status = ModEntry.Instance.QuarterEvade.Status,
             statusAmount = 1,
-            targetPlayer = playerOwned
+            targetPlayer = playerOwned,
+            timer = 0
         });
     }
 
-    public override void OnPartHit(State state, Combat combat, Part part)
+    public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
         if (playerOwned) return;
         combat.QueueImmediate(new AMove
         {
             dir = combat.otherShip.x + (combat.otherShip.parts.Count/2f) > state.ship.x + (state.ship.parts.Count/2f) ? -1 : 1,
-            targetPlayer = false
+            targetPlayer = false,
+            timer = 0
         });
     }
 

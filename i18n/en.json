@@ -11,6 +11,10 @@
     "QuarterEvade": {
       "name": "Quarter Evade",
       "desc": "Combine 2 to gain 1 <c=status>HALF EVADE</c>."
+    },
+    "QuarterTempShield": {
+      "name": "Quarter Temp Shield",
+      "desc": "Combine 2 to gain 1 <c=status>HALF TEMP SHIELD</c>."
     }
   },
   "action": {
@@ -27,8 +31,8 @@
   "fragment": {
     "BlueFragment": {
       "name": "Blue Fragment",
-      "playerDesc": "Gain 1 <c=status>HALF SHIELD</c> at the start of every turn.",
-      "enemyDesc": "Gain 1 <c=status>HALF SHIELD</c> at the start of every turn."
+      "playerDesc": "Gain 1 <c=status>HALF SHIELD</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "Gain 1 <c=status>HALF SHIELD</c> when this <c=part>part</c> is shot."
     },
     "RedFragment": {
       "name": "Red Fragment",
@@ -47,18 +51,160 @@
     },
     "MagentaFragment": {
       "name": "Magenta Fragment",
-      "playerDesc": "Gain 1 <c=status>HALF TEMP SHIELD</c> when this <c=part>part</c> is shot.",
-      "enemyDesc": "Gain 1 <c=status>HALF TEMP SHIELD</c> when this <c=part>part</c> is shot."
+      "playerDesc": "Gain 1 <c=status>QUARTER TEMP SHIELD</c> at the start of every turn.",
+      "enemyDesc": "Gain 1 <c=status>QUARTER TEMP SHIELD</c> at the start of every turn."
     },
     "CyanFragment": {
       "name": "Cyan Fragment",
-      "playerDesc": "The enemy gains 1 <c=status>OXIDATION</c> when this <c=part>part</c> is shot.",
+      "playerDesc": "The enemy gains 2 <c=status>OXIDATION</c> when this <c=part>part</c> is shot.",
       "enemyDesc": "You gain 3 <c=status>OXIDATION</c> when this <c=part>part</c> is shot."
     },
     "OrangeFragment": {
       "name": "Orange Fragment",
-      "playerDesc": "The enemy gains 1 <c=status>HEAT</c> when this <c=part>part</c> is shot.",
-      "enemyDesc": "You gain 1 <c=status>HEAT</c> when this <c=part>part</c> is shot."
+      "playerDesc": "The enemy gains 3 <c=status>HEAT</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "You gain 3 <c=status>HEAT</c> when this <c=part>part</c> is shot."
+    }
+  },
+  "item": {
+    "BR": {
+      "name": "BR",
+      "playerDesc": "<c=action>Attacks</c> from this <c=part>part</c> pierce.",
+      "enemyDesc": "<c=action>Attacks</c> from this <c=part>part</c> pierce."
+    },
+    "BG": {
+      "name": "BG",
+      "playerDesc": "When this <c=part>part</c> takes hull damage gain 1 <c=hull>max hull</c>.",
+      "enemyDesc": "When this <c=part>part</c> takes hull damage gain 1 <c=hull>max hull</c>."
+    },
+    "BY": {
+      "name": "BY",
+      "playerDesc": "When this <c=part>part</c> <c=action>attacks</c> gain 1 <c=status>HALF SHIELD</c> and 1 <c=status>HALF EVADE</c>.",
+      "enemyDesc": "When this <c=part>part</c> <c=action>attacks</c> gain 1 <c=status>HALF SHIELD</c> and 1 <c=status>HALF EVADE</c>."
+    },
+    "BM": {
+      "name": "BM",
+      "playerDesc": "At the start of combat gain 1 <c=status>PERFECT SHIELD</c>.",
+      "enemyDesc": "At the start of combat gain 1 <c=status>PERFECT SHIELD</c>."
+    },
+    "BC": {
+      "name": "BC",
+      "playerDesc": "Prevent 1 <c=hull>hull</c> damage a turn.",
+      "enemyDesc": "Prevent 1 <c=hull>hull</c> damage a turn."
+    },
+    "BO": {
+      "name": "BO",
+      "playerDesc": "Gain 2 <c=status>SERENITY</c> at the start of every turn.",
+      "enemyDesc": "Gain 2 <c=status>SERENITY</c> at the start of every turn."
+    },
+    "RG": {
+      "name": "RG",
+      "playerDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal <c=hull>hull</c> damage they deal 2 more.",
+      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal <c=hull>hull</c> damage they deal 2 more."
+    },
+    "RY": {
+      "name": "RY",
+      "playerDesc": "This <c=part>part</c> <c=action>attacks</c> for 0 and applies <c=status>HALF DAMAGE</c> when this ship moves.",
+      "enemyDesc": "This <c=part>part</c> <c=action>attacks</c> for 0 and applies <c=status>HALF DAMAGE</c> when this ship moves."
+    },
+    "RM": {
+      "name": "RM",
+      "playerDesc": "At the start of every turn gain 1 <c=status>FLUX</c>.",
+      "enemyDesc": "At the start of every turn gain 1 <c=status>FLUX</c>."
+    },
+    "RC": {
+      "name": "RC",
+      "playerDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage give 3 <c=status>OXIDATION</c>.",
+      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage give 3 <c=status>OXIDATION</c>."
+    },
+    "RO": {
+      "name": "RO",
+      "playerDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage give 3 <c=status>HEAT</c>.",
+      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage give 3 <c=status>HEAT</c>."
+    },
+    "GY": {
+      "name": "GY",
+      "playerDesc": "Gain 1 <c=status>QUARTER HEAL</c> when this ship moves.",
+      "enemyDesc": "Gain 1 <c=status>QUARTER HEAL</c> when this ship moves."
+    },
+    "GM": {
+      "name": "GM",
+      "playerDesc": "Gain 1 <c=status>QUARTER HEAL</c> and 5 <c=status>TEMP SHIELD</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "Gain 1 <c=status>QUARTER HEAL</c> and 5 <c=status>TEMP SHIELD</c> when this <c=part>part</c> is shot."
+    },
+    "GC": {
+      "name": "GC",
+      "playerDesc": "Set <c=status>OXIDATION</c> to 0 and lose 1 <c=status>CORRODE</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "Set <c=status>OXIDATION</c> to 0 and lose 1 <c=status>CORRODE</c> when this <c=part>part</c> is shot."
+    },
+    "GO": {
+      "name": "GO",
+      "playerDesc": "Set <c=status>HEAT</c> to 0 and gain 1 <c=status>SERENITY</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "Set <c=status>HEAT</c> to 0 and gain 1 <c=status>SERENITY</c> when this <c=part>part</c> is shot."
+    },
+    "YM": {
+      "name": "YM",
+      "playerDesc": "Gain 3 <c=status>EVADE</c> and 5 <c=status>TEMP SHIELD</c> when this <c=part>part</c> takes <c=hull>hull</c> damage.",
+      "enemyDesc": "Gain 5 <c=status>TEMP SHIELD</c> and <c=status>ENGINE LOCK</c> you when this <c=part>part</c> takes <c=hull>hull</c> damage."
+    },
+    "YC": {
+      "name": "YC",
+      "playerDesc": "When the other ship moves it gains 1 <c=status>OXIDATION</c>.",
+      "enemyDesc": "When the other ship moves it gains 1 <c=status>OXIDATION</c>."
+    },
+    "YO": {
+      "name": "YO",
+      "playerDesc": "Gain 2 <c=status>EVADE</c> and 2 <c=status>HEAT</c> at the start of every turn.",
+      "enemyDesc": "The other ship gains 1 <c=status>ENGINE STALL</c> at the start of each of it's turns."
+    },
+    "MC": {
+      "name": "MC",
+      "playerDesc": "When <c=part>part</c> is shot while this ship has <c=status>TEMP SHIELD</c> the other ship gains 4 <c=status>OXIDATION</c>.",
+      "enemyDesc": "When <c=part>part</c> is shot while this ship has <c=status>TEMP SHIELD</c> the other ship gains 4 <c=status>OXIDATION</c>."
+    },
+    "MO": {
+      "name": "MO",
+      "playerDesc": "When this ship <c=action>OVERHEATs</c> it gains 5 <c=status>TEMP SHIELD</c>.",
+      "enemyDesc": "When this ship <c=action>OVERHEATs</c> it gains 5 <c=status>TEMP SHIELD</c>."
+    },
+    "CO": {
+      "name": "CO",
+      "playerDesc": "Deal 1 <c=hull>hull</c> damage to the other ship when this <c=part>part</c> is shot.",
+      "enemyDesc": "Deal 1 <c=hull>hull</c> damage to the other ship when this <c=part>part</c> is shot."
+    },
+    "BB": {
+      "name": "BB",
+      "playerDesc": "This <c=part>part</c> gains <c=parttrait>armor</c>.",
+      "enemyDesc": "This <c=part>part</c> gains <c=parttrait>armor</c>."
+    },
+    "RR": {
+      "name": "RR",
+      "playerDesc": "<c=action>Attacks</c> from this <c=part>part</c> deal 1 more damage.",
+      "enemyDesc": "<c=action>Attacks</c> from this <c=part>part</c> deal 1 more damage."
+    },
+    "GG": {
+      "name": "GG",
+      "playerDesc": "Gain +3 <c=hull>max hull</c>.",
+      "enemyDesc": "Gain +3 <c=hull>max hull</c>."
+    },
+    "YY": {
+      "name": "YY",
+      "playerDesc": "Gain 1 <c=status>AUTODODGE RIGHT</c> at the start of every turn.",
+      "enemyDesc": "Gain 1 <c=status>AUTODODGE RIGHT</c> at the start of every turn."
+    },
+    "MM": {
+      "name": "MM",
+      "playerDesc": "When this <c=part>part</c> is shot every <c=part>part</c> gains <c=parttrait>armor</c> until the next turn.",
+      "enemyDesc": "When this <c=part>part</c> is shot every <c=part>part</c> gains <c=parttrait>armor</c> until the next turn."
+    },
+    "CC": {
+      "name": "CC",
+      "playerDesc": "The other ship gains 3 <c=status>OXIDATION</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "The other ship gains 3 <c=status>OXIDATION</c> when this <c=part>part</c> is shot."
+    },
+    "OO": {
+      "name": "OO",
+      "playerDesc": "Deal 2 damage to the other ship when this <c=part>part</c> is shot.",
+      "enemyDesc": "Deal 2 damage to the other ship when this <c=part>part</c> is shot."
     }
   },
   "uiText": {
@@ -70,6 +216,7 @@
   },
   "dialogue": {
     "FragmentSequence": "CRYSTAL FRAGMENTATION DETECTED!!! >>> PLEASE SELECT BOOT OPTION",
-    "FragmentSequence_Option": "Gain <c={{firstColor}}>{{first}}</c> and <c={{secondColor}}>{{second}}</c>."
+    "FragmentSequence_Option": "Gain <c={{firstColor}}>{{first}}</c> and <c={{secondColor}}>{{second}}</c>.",
+    "CraftanItem": "Craft an item (Free!)"
   }
 }

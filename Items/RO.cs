@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace PartCrystals.Fragments;
 
-public class CyanFragment : Fragment
+public class RO : Item
 {
-    public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
+    public override void OnPartDamages(State state, Combat combat, Part part, DamageDone damageDone, Ship ship)
     {
         combat.QueueImmediate(new AStatus
         {
-            status = ModEntry.Instance.KokoroApi.OxidationStatus.Status,
-            statusAmount = playerOwned ? 2 : 3,
+            status = Status.heat,
+            statusAmount = 3,
             targetPlayer = !playerOwned,
             timer = 0
         });
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => StatusMeta.GetTooltips(ModEntry.Instance.KokoroApi.OxidationStatus.Status, 0);
+        => StatusMeta.GetTooltips(Status.heat, 2);
 }

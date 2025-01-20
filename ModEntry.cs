@@ -28,12 +28,13 @@ internal class ModEntry : SimpleMod
     public IStatusEntry HalfEvade;
     public IStatusEntry HalfShield;
     public IStatusEntry HalfTempShield;
+    public IStatusEntry QuarterTempShield;
     public IStatusEntry HalfDamage;
     public IStatusEntry QuarterEvade;
     public IStatusEntry HalfHeal;
     public IStatusEntry QuarterHeal;
-    public Dictionary<string, ISpriteEntry> FragmentSprites; //NEED TO MAKE
-    //public Dictionary<string, ISpriteEntry> ItemSprites; //NEED TO MAKE
+    public Dictionary<string, ISpriteEntry> FragmentSprites;
+    public Dictionary<string, ISpriteEntry> ItemSprites;
     
     public readonly List<Type> fragmentTypes =
     [
@@ -45,6 +46,8 @@ internal class ModEntry : SimpleMod
             typeof(CyanFragment),
             typeof(OrangeFragment)
     ];
+
+    public Dictionary<Type, Dictionary<Type, Type>> fragmentFragmentToItem = [];
 
     /*
      * The following lists contain references to all types that will be registered to the game.
@@ -112,6 +115,22 @@ internal class ModEntry : SimpleMod
         List<Fragment> fragments = [new BlueFragment(), new RedFragment(), new GreenFragment(), new YellowFragment(), new MagentaFragment(), new CyanFragment(), new OrangeFragment()];
         FragmentSprites = new();
         foreach(Fragment fragment in fragments) FragmentSprites[fragment.Key()] = RegisterSprite(package, $"assets/fragments/{fragment.Key()}.png");
+        ItemSprites = new();
+        foreach (Fragment fragment in fragments) ItemSprites[fragment.Key()] = RegisterSprite(package, $"assets/items/{fragment.Key()}.png");
+        foreach (Type type1 in fragmentTypes)
+        {
+            fragmentFragmentToItem[type1] = [];
+            foreach (Type type2 in fragmentTypes)
+            {
+                foreach (Type typeA in GetType().Assembly.GetTypes())
+                {
+                    if (new string([type1.Name[0], type2.Name[0]]) == typeA.Name || new string([type2.Name[0], type1.Name[0]]) == typeA.Name)
+                    {
+                        fragmentFragmentToItem[type1][type2] = typeA;
+                    }
+                }
+            }
+        }
         /*
          * Statuses are used to achieve many mechanics.
          * However, statuses themselves do not contain any code - they just keep track of how much you have.
@@ -151,6 +170,18 @@ internal class ModEntry : SimpleMod
             },
             Name = AnyLocalizations.Bind(["status", "QuarterEvade", "name"]).Localize,
             Description = AnyLocalizations.Bind(["status", "QuarterEvade", "desc"]).Localize
+        });
+        QuarterTempShield = helper.Content.Statuses.RegisterStatus("QuarterTempShield", new StatusConfiguration
+        {
+            Definition = new StatusDef
+            {
+                isGood = true,
+                affectedByTimestop = false,
+                color = Colors.healthBarTempShield,
+                icon = RegisterSprite(package, "assets/icons/QuarterTempShield.png").Sprite
+            },
+            Name = AnyLocalizations.Bind(["status", "QuarterTempShield", "name"]).Localize,
+            Description = AnyLocalizations.Bind(["status", "QuarterTempShield", "desc"]).Localize
         });
         _ = new PartialStatusManager();
 

@@ -8,13 +8,14 @@ namespace PartCrystals.Fragments;
 
 public class OrangeFragment : Fragment
 {
-    public override void OnPartHit(State state, Combat combat, Part part)
+    public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
         combat.QueueImmediate(new AStatus
         {
             status = Status.heat,
-            statusAmount = 1,
-            targetPlayer = !playerOwned
+            statusAmount = 3,
+            targetPlayer = !playerOwned,
+            timer = 0
         });
     }
 

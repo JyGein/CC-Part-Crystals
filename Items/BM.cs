@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace PartCrystals.Fragments;
 
-public class MagentaFragment : Fragment
+public class BM : Item
 {
-    public override void OnTurnStart(State state, Combat combat, Part part)
+    public override void OnCombatStart(State state, Combat combat, Part part)
     {
         combat.Queue(new AStatus
         {
-            status = ModEntry.Instance.QuarterTempShield.Status,
+            status = Status.perfectShield,
             statusAmount = 1,
             targetPlayer = playerOwned,
             timer = 0
@@ -20,5 +20,5 @@ public class MagentaFragment : Fragment
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => StatusMeta.GetTooltips(ModEntry.Instance.QuarterTempShield.Status, 1);
+        => StatusMeta.GetTooltips(Status.perfectShield, 1);
 }

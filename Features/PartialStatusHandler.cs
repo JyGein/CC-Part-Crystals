@@ -33,14 +33,15 @@ internal sealed class PartialStatusManager
 
     private static void G_Render_Postfix(double deltaTime, G __instance)
     {
-        ModEntry.Instance.Logger.LogInformation(__instance.state.route.GetType().Name);
-        if (__instance.state.routeOverride == null) return;
-        ModEntry.Instance.Logger.LogInformation(__instance.state.routeOverride!.GetType().Name);
+        //ModEntry.Instance.Logger.LogInformation(__instance.state.route.GetType().Name);
+        //if (__instance.state.routeOverride == null) return;
+        //ModEntry.Instance.Logger.LogInformation(__instance.state.routeOverride!.GetType().Name);
     }
 
     private static void Combat_Update_Postfix(G g, Combat __instance)
     {
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterEvade.Status, ModEntry.Instance.HalfEvade.Status);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterTempShield.Status, ModEntry.Instance.HalfTempShield.Status);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterHeal.Status, ModEntry.Instance.HalfHeal.Status);
         Partial_Heal_Handler(g, __instance);
         Partial_Enemy_Heal_Handler(g, __instance);

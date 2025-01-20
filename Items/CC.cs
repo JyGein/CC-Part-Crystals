@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class CC : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(CyanFragment), typeof(CyanFragment)];
+
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
         combat.QueueImmediate(new AStatus

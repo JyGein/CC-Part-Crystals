@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class GY : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(GreenFragment), typeof(YellowFragment)];
+
     public override void OnShipMoves(State state, Combat combat, Part part)
     {
         combat.QueueImmediate(new AStatus

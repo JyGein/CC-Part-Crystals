@@ -9,6 +9,9 @@ namespace PartCrystals.Fragments;
 
 public class RY : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(RedFragment), typeof(YellowFragment)];
+
     public override void OnShipShoots(State state, Combat combat, Part part)
     {
         combat.QueueImmediate(new AAttack

@@ -21,14 +21,13 @@ public class Item : AttachableToPart
     public int v = Mutil.NextRandInt();
     public static readonly UK ItemUK = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
     public override int GetSize() => 2;
-    public List<Type> GetBaseFragmentTypes() => [];
-    public List<Type> baseFragmentTypes = [];
+    public virtual List<Type> GetBaseFragmentTypes() => [];
     public virtual List<Tooltip>? GetExtraTooltips()
         => null;
 
     public List<Spr> GetSprites()
     {
-        return baseFragmentTypes.Select(f => ModEntry.Instance.ItemSprites[f.Name].Sprite).ToList();
+        return GetBaseFragmentTypes().Select(f => ModEntry.Instance.ItemSprites[f.Name].Sprite).ToList();
     }
 
     public override string Name()
@@ -51,13 +50,13 @@ public class Item : AttachableToPart
         List<Tooltip> list = new()
         {
             new TTDivider(),
-            new TTText($"<c={Fragment.FragmentColors[baseFragmentTypes[0]]}>{Name().ToUpper()[0]}</c><c={Fragment.FragmentColors[baseFragmentTypes[1]]}>{Name().ToUpper()[1]}</c>\n{Desc()}")
+            new TTText($"<c={Fragment.FragmentColors[GetBaseFragmentTypes()[0]]}>{Name().ToUpper()[0]}</c><c={Fragment.FragmentColors[GetBaseFragmentTypes()[1]]}>{Name().ToUpper()[1]}</c>\n{Desc()}")
         };
         if (GetExtraTooltips() != null)
         {
             list.AddRange(GetExtraTooltips()!);
         }
-        foreach(Type type in baseFragmentTypes)
+        foreach(Type type in GetBaseFragmentTypes())
         {
             Fragment f = (Fragment)AccessTools.CreateInstance(type);
             f.playerOwned = playerOwned;
@@ -68,7 +67,7 @@ public class Item : AttachableToPart
 
     public override void Render(G g, Vec restingPosition, bool autoFocus = false, OnMouseDown? onMouseDown = null, Color? color = null)
     {
-        UIKey? key = UIKey();
+        UIKey key = UIKey();
         Rect? rect = new Rect(0.0, 0.0, 11.0, 7.0) + restingPosition;
         bool autoFocus2 = autoFocus;
         Box box = g.Push(key, rect, null, autoFocus2, onMouseDown: onMouseDown);

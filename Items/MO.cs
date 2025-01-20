@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class MO : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(MagentaFragment), typeof(OrangeFragment)];
+
     public override void OnShipOverheats(State state, Combat combat, Part part)
     {
         combat.QueueImmediate(new AStatus

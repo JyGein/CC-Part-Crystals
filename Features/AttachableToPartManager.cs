@@ -180,10 +180,11 @@ internal sealed class AttachableToPartManager
 
     private static void Ship_RenderPartUI_Postfix(G g, Combat? combat, Part part, int localX, string keyPrefix, bool isPreview)
     {
+        if (keyPrefix != "shipUpgrade_shipPreview") return;
         AddAttachableTTs(g, part, localX, keyPrefix);
         ShipUpgrades? shipUpgrades = null;
-        if (g.state.route is MapRoute && g.state.routeOverride is ShipUpgrades) shipUpgrades = (ShipUpgrades)g.state.routeOverride;
-        else if (g.state.route is Dialogue dialogue && dialogue.routeOverride is ShipUpgrades) shipUpgrades = (ShipUpgrades)dialogue.routeOverride;
+        if (g.state.route is MapRoute && g.state.routeOverride is ShipUpgrades upgrades1) shipUpgrades = upgrades1;
+        else if (g.state.route is Dialogue dialogue && dialogue.routeOverride is ShipUpgrades upgrades && upgrades.GetIsActuallyCrafting()) shipUpgrades = upgrades;
         if (shipUpgrades != null)
         {
             if (shipUpgrades.GetHeldAttachable() != null)
@@ -195,38 +196,12 @@ internal sealed class AttachableToPartManager
             int num = 0;
             foreach(AttachableToPart attachable in attachables)
             {
-                if (attachable is Fragment fragment)
-                {
-                    Vec vec = new(localX * 16);
-                    int num1 = 11;
-                    vec.y += num1;
-                    Rect rect = new(vec.x - 1.0 + 3 + (num % 2 * 6), vec.y + (num/2 * 8), 5, 7);
-                    Box box = g.Push(fragment.UIKey(), rect, onMouseDown: shipUpgrades);
-                    Vec pos = box.rect.xy + new Vec(5 + 2);
-                    if (box.IsHover()) g.tooltips.Add(pos, fragment.GetTooltips().Skip(1));
-                    num++;
-                    Spr id = fragment.GetSprite();
-                    Vec xy = box.rect.xy;
-                    Draw.Sprite(id, xy.x, xy.y);
-                    g.Pop();
-                }
-                else if (attachable is Item item)
-                {
-                    Vec vec = new(localX * 16);
-                    int num1 = 11;
-                    vec.y += num1;
-                    Rect rect = new(vec.x - 1.0 + 3 + (num % 2 * 6), vec.y + (num / 2 * 8), 11, 7);
-                    Box box = g.Push(item.UIKey(), rect, onMouseDown: shipUpgrades);
-                    Vec pos = box.rect.xy + new Vec(5 + 2);
-                    if (box.IsHover()) g.tooltips.Add(pos, item.GetTooltips().Skip(1));
-                    num += 2;
-                    Vec xy = box.rect.xy;
-                    List<Spr> sprs = item.GetSprites();
-                    Vec vec2 = xy.round();
-                    Draw.Sprite(sprs[0], vec2.x, vec2.y);
-                    Draw.Sprite(sprs[1], vec2.x, vec2.y, true, true);
-                    g.Pop();
-                }
+                Vec vec = new(localX * 16);
+                int num1 = 11;
+                vec.y += num1;
+                Rect rect = new(vec.x - 1.0 + 3 + (num % 2 * 6), vec.y + (num / 2 * 8), 11, 7);
+                attachable.Render(g, rect.xy, false, shipUpgrades);
+                num += attachable.GetSize();
             }
         }
     }
@@ -248,11 +223,10 @@ internal sealed class AttachableToPartManager
         int startX = g.mg.PIX_W;
         attachables.ForEach(attachable => startX -= attachable is Fragment ? 9 : 15);
         startX /= 2;
-        startX -= 1;
+        //startX -= 1;
         int num = 0;
         foreach (AttachableToPart attachable in attachables)
         {
-            UIKey key = attachable.UIKey();
             Vec vec = new(startX + num, 60);
             int num3 = attachable is Fragment ? 5 : 11;
             num += num3 + 4;
@@ -286,7 +260,6 @@ internal sealed class AttachableToPartManager
                 Fragment fragment1 = (Fragment)(g.state.GetPlayerAttachables().FirstOrDefault(f => f.UIKey() == __instance.GetHeldAttachable()!.UIKey()) ?? g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == __instance.GetHeldAttachable()!.UIKey()) > 0).GetAttachables().FirstOrDefault(f => f.UIKey() == key)!);
                 Fragment fragment2 = (Fragment)(g.state.GetPlayerAttachables().FirstOrDefault(f => f.UIKey() == key) ?? g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == key) > 0).GetAttachables().FirstOrDefault(f => f.UIKey() == key)!);
                 Item item = (Item)AccessTools.CreateInstance(ModEntry.Instance.fragmentFragmentToItem[fragment1.GetType()][fragment2.GetType()]);
-                item.baseFragmentTypes = [fragment1.GetType(), fragment2.GetType()];
                 g.state.SetPlayerAttachables([.. g.state.GetPlayerAttachables().Where(a => a.UIKey() != key && a.UIKey() != __instance.GetHeldAttachable()!.UIKey()), item]);
                 g.state.ship.parts.ForEach(p => p.SetAttachables(p.GetAttachables().Where(a => a.UIKey() != key && a.UIKey() != __instance.GetHeldAttachable()!.UIKey()).ToList()));
                 g.state.route.SetHasCraftedHere(true);

@@ -72,7 +72,7 @@ public class Fragment : AttachableToPart
 
     public override void Render(G g, Vec restingPosition, bool autoFocus = false, OnMouseDown? onMouseDown = null, Color? color = null)
     {
-        UIKey? key = UIKey();
+        UIKey key = UIKey();
         Rect? rect = new Rect(0.0, 0.0, 5.0, 7.0) + restingPosition;
         bool autoFocus2 = autoFocus;
         Box box = g.Push(key, rect, null, autoFocus2, onMouseDown: onMouseDown);

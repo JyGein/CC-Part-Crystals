@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class YM : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(YellowFragment), typeof(MagentaFragment)];
+
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
         if (damageDone.hitHull)

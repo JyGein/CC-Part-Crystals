@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class BB : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(BlueFragment), typeof(BlueFragment)];
+
     public PDamMod OGPDamMod;
     public PDamMod? OGPDamModOverride;
     public override void OnCombatStart(State state, Combat combat, Part part)

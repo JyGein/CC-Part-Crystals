@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class MC : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(MagentaFragment), typeof(CyanFragment)];
+
     public override void BeforePartHit(State state, Combat combat, Part part, int incomingDamage)
     {
         if ((playerOwned ? state.ship : combat.otherShip).Get(Status.tempShield) <= 0) return;

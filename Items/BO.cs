@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class BO : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(BlueFragment), typeof(OrangeFragment)];
+
     public override void OnTurnStart(State state, Combat combat, Part part)
     {
         combat.Queue(new AStatus

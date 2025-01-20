@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class BR : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(BlueFragment), typeof(RedFragment)];
+
     public override void AlterAttackFromPart(State state, Combat combat, Part part, AAttack aAttack)
     {
         aAttack.piercing = true;

@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class GG : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(GreenFragment), typeof(GreenFragment)];
+
     public int storedHull = 0;
     public override void OnCombatStart(State state, Combat combat, Part part)
     {

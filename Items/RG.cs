@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class RG : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(RedFragment), typeof(GreenFragment)];
+
     public override void OnPartDamages(State state, Combat combat, Part part, DamageDone damageDone, Ship ship)
     {
         if (damageDone.hitHull)

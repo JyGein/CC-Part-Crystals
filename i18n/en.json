@@ -113,13 +113,13 @@
     },
     "RC": {
       "name": "RC",
-      "playerDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage give 3 <c=status>OXIDATION</c>.",
-      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage give 3 <c=status>OXIDATION</c>."
+      "playerDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage they give 3 <c=status>OXIDATION</c>.",
+      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage they give 3 <c=status>OXIDATION</c>."
     },
     "RO": {
       "name": "RO",
-      "playerDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage give 3 <c=status>HEAT</c>.",
-      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage give 3 <c=status>HEAT</c>."
+      "playerDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage they give 3 <c=status>HEAT</c>.",
+      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage they give 3 <c=status>HEAT</c>."
     },
     "GY": {
       "name": "GY",
@@ -163,8 +163,8 @@
     },
     "MO": {
       "name": "MO",
-      "playerDesc": "When this ship <c=action>OVERHEATs</c> it gains 5 <c=status>TEMP SHIELD</c>.",
-      "enemyDesc": "When this ship <c=action>OVERHEATs</c> it gains 5 <c=status>TEMP SHIELD</c>."
+      "playerDesc": "When this ship <c=action>OVERHEATS</c> it gains 5 <c=status>TEMP SHIELD</c>.",
+      "enemyDesc": "When this ship <c=action>OVERHEATS</c> it gains 5 <c=status>TEMP SHIELD</c>."
     },
     "CO": {
       "name": "CO",

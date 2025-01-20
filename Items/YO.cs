@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class YO : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(YellowFragment), typeof(OrangeFragment)];
+
     public override void OnTurnStart(State state, Combat combat, Part part)
     {
         if (!playerOwned) return;

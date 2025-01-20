@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class MM : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(MagentaFragment), typeof(MagentaFragment)];
+
     public List<PDamMod?> OGPDamMods = [];
     public override void OnTurnStart(State state, Combat combat, Part part)
     {

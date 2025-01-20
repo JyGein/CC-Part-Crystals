@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class BC : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(BlueFragment), typeof(CyanFragment)];
+
     bool prevented = false;
     public override void OnTurnStart(State state, Combat combat, Part part)
     {

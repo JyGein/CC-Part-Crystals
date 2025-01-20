@@ -30,14 +30,14 @@ BO - Gain 2 Serenity at start of turn
 RG - When attacks from this part deal Hull Damage deal 2 more
 RY - This part fires for 1/2 when you move
 RM - At start of turn gain 1 Flux
-RC - Shots from this part give 2 Oxidize
-RO - Shots from this part give 1 Heat
+RC - Shots from this part give 3 Oxidize
+RO - Shots from this part give 3 Heat
 GY - Heal 1/4 health each movement
 GM - Heal 1/4 and +5 Temp Shield when part is shot
 GC - Oxidize = 0 and -1 Corrode when part is shot
 GO - Heat = 0 and +1 Serenity when part is shot
 YM - +3 Evade & +5 Temp Shield When this part takes hull damage	- +5 Temp Shield and engine lock player when this part takes hull damage
-YC - When the enemy moves they gain 2 Oxidize
+YC - When the enemy moves they gain 1 Oxidize
 YO - +2 Evade +2 Heat at start of turn							- Engine stall player at start of turn
 MC - When part is shot while having Temp Shield 4 Oxidize enemy	
 MO - When you overheat +5 Temp Shield
@@ -55,5 +55,3 @@ FORMATS:
 
 Fragments:
 Color - Player Effect - Enemy Effect
-
-"Thing" = temp name

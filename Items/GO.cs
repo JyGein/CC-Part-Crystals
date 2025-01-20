@@ -8,6 +8,9 @@ namespace PartCrystals.Fragments;
 
 public class GO : Item
 {
+    public override List<Type> GetBaseFragmentTypes()
+        => [typeof(GreenFragment), typeof(OrangeFragment)];
+
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
         combat.QueueImmediate([new AStatus

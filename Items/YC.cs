@@ -13,6 +13,7 @@ public class YC : Item
 
     public override void OnOtherShipMoves(State state, Combat combat, Part part)
     {
+        base.OnOtherShipMoves(state, combat, part);
         combat.QueueImmediate(new AStatus
         {
             status = ModEntry.Instance.KokoroApi.OxidationStatus.Status,

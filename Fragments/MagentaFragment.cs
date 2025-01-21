@@ -12,7 +12,7 @@ public class MagentaFragment : Fragment
     {
         combat.Queue(new AStatus
         {
-            status = ModEntry.Instance.QuarterTempShield.Status,
+            status = ModEntry.Instance.HalfTempShield.Status,
             statusAmount = 1,
             targetPlayer = playerOwned,
             timer = 0
@@ -20,5 +20,5 @@ public class MagentaFragment : Fragment
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => StatusMeta.GetTooltips(ModEntry.Instance.QuarterTempShield.Status, 1);
+        => StatusMeta.GetTooltips(ModEntry.Instance.HalfTempShield.Status, 1);
 }

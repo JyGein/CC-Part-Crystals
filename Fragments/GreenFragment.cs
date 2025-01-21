@@ -10,10 +10,10 @@ public class GreenFragment : Fragment
 {
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
-        combat.QueueImmediate(playerOwned ?
+        combat.QueueImmediate(true ?
             new AStatus
             {
-                status = ModEntry.Instance.QuarterHeal.Status,
+                status = ModEntry.Instance.HalfHeal.Status,
                 statusAmount = 1,
                 targetPlayer = true,
                 timer = 0
@@ -27,5 +27,5 @@ public class GreenFragment : Fragment
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => !playerOwned ? null : StatusMeta.GetTooltips(ModEntry.Instance.QuarterHeal.Status, 1);
+        => !playerOwned ? null : StatusMeta.GetTooltips(ModEntry.Instance.HalfHeal.Status, 1);
 }

@@ -210,8 +210,8 @@ internal class ModEntry : SimpleMod
 
     public static int? GetPartX(Part part, State state, Combat combat)
     {
-        if (state.ship.parts.Where((p) => p == part).Count() > 0) return state.ship.x + state.ship.parts.FindIndex((p) => p == part);
-        else if (combat.otherShip.parts.Where((p) => p == part).Count() > 0) return combat.otherShip.x + combat.otherShip.parts.FindIndex((p) => p == part);
+        if (state.ship.parts.Any((p) => p == part)) return state.ship.x + state.ship.parts.FindIndex((p) => p == part);
+        else if (combat.otherShip.parts.Any((p) => p == part)) return combat.otherShip.x + combat.otherShip.parts.FindIndex((p) => p == part);
         return null;
     }
 

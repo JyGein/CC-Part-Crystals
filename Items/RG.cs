@@ -13,6 +13,7 @@ public class RG : Item
 
     public override void OnPartDamages(State state, Combat combat, Part part, DamageDone damageDone, Ship ship)
     {
+        base.OnPartDamages(state, combat, part, damageDone, ship);
         if (damageDone.hitHull)
         {
             ship.DirectHullDamage(state, combat, 2);

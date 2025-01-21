@@ -13,6 +13,7 @@ public class MC : Item
 
     public override void BeforePartHit(State state, Combat combat, Part part, int incomingDamage)
     {
+        base.BeforePartHit(state, combat, part, incomingDamage);
         if ((playerOwned ? state.ship : combat.otherShip).Get(Status.tempShield) <= 0) return;
         combat.QueueImmediate(new AStatus
         {

@@ -14,11 +14,13 @@ public class BC : Item
     bool prevented = false;
     public override void OnTurnStart(State state, Combat combat, Part part)
     {
+        base.OnTurnStart(state, combat, part);
         prevented = false;
     }
 
     public override void AlterHullDamage(State state, Combat combat, Ship ship, ref int amt)
     {
+        base.AlterHullDamage(state, combat, ship, ref amt);
         if (!prevented && amt >= 1 && ship.Get(Status.perfectShield) <= 0)
         {
             amt -= 1;

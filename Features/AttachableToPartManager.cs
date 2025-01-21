@@ -16,12 +16,15 @@ using Microsoft.Xna.Framework;
 using System.Drawing;
 using PartCrystals.Actions;
 using System.Xml.Serialization;
+using FSPRO;
+using PartCrystals.Routes;
 
 namespace PartCrystals.Features;
 
 internal sealed class AttachableToPartManager
 {
     public static UK OpenShipManagerButton = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
+    public static UK CodexItems = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
     public static string afterFragmentSequenceKey = ".zone_first";
     public AttachableToPartManager()
     {
@@ -152,6 +155,72 @@ internal sealed class AttachableToPartManager
             original: AccessTools.DeclaredMethod(typeof(AOverheat), nameof(AOverheat.Begin)),
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AOverheat_Begin_Postfix))
         );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(G), nameof(G.Render)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(G_Render_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(Codex), nameof(Codex.Render)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Codex_Render_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(Codex), nameof(Codex.OnMouseDown)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Codex_OnMouseDown_Postfix))
+        );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(Dialogue), nameof(Dialogue.GetMusic)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Dialogue_GetMusic_Postfix))
+        );
+    }
+
+    private static void Dialogue_GetMusic_Postfix(Dialogue __instance, ref MusicState? __result)
+    {
+        if(__instance.ctx.script.StartsWith("FragmentSequence"))
+        {
+            __result = Music.@void;
+        }
+    }
+
+    private static void G_Render_Postfix(G __instance)
+    {
+        //if (__instance.metaRoute != null)
+        //{
+        //    ModEntry.Instance.Logger.LogInformation(__instance.metaRoute.GetType().Name);
+        //    if (__instance.metaRoute.subRoute != null)
+        //    {
+        //        ModEntry.Instance.Logger.LogInformation(__instance.metaRoute.subRoute.GetType().Name);
+        //        if (__instance.metaRoute.subRoute is Codex codex && codex.subRoute != null)
+        //        {
+        //            ModEntry.Instance.Logger.LogInformation(codex.subRoute.GetType().Name);
+        //        }
+        //    }
+        //}
+        //ModEntry.Instance.Logger.LogInformation(__instance.state.route.GetType().Name);
+        //if (__instance.state.routeOverride != null) ModEntry.Instance.Logger.LogInformation(__instance.state.routeOverride.GetType().Name);
+    }
+
+    private static void Codex_Render_Postfix(Codex __instance, G g)
+    {
+        if (__instance.subRoute != null)
+        {
+            return;
+        }
+        Rect? rect = new Rect(0.0, 0.0, 0.0, 0.0);
+        int num = 180;
+        rect = new Rect(240 - num / 2, 100.0);
+        g.Push(null, rect);
+        SharedArt.MenuItem(g, new Vec(-10.0, 126.0), num, isBig: false, CodexItems, ModEntry.Instance.Localizations.Localize(["uiText", "codex", "items"]), __instance);
+        g.Pop();
+    }
+
+    private static void Codex_OnMouseDown_Postfix(Codex __instance, G g, Box b)
+    {
+        if (b.key == CodexItems)
+        {
+            Audio.Play(Event.Click);
+            __instance._lastSelected = Input.currentGpKey;
+            __instance.subRoute = new ItemBrowse();
+        }
     }
 
     private static void MapRoute_Render_Postfix(MapRoute __instance, G g)
@@ -178,13 +247,27 @@ internal sealed class AttachableToPartManager
         }
     }
 
-    private static void Ship_RenderPartUI_Postfix(G g, Combat? combat, Part part, int localX, string keyPrefix, bool isPreview)
+    private static void Ship_RenderPartUI_Postfix(Ship __instance, G g, Combat? combat, Part part, int localX, string keyPrefix, bool isPreview)
     {
-        if (keyPrefix != "shipUpgrade_shipPreview") return;
         AddAttachableTTs(g, part, localX, keyPrefix);
+        if (combat != null && !isPreview)
+        {
+            List<AttachableToPart> attachables = [.. part.GetAttachables().OrderBy(a => a is Fragment ? "b" : "a")];
+            int num = 0;
+            foreach (AttachableToPart attachable in attachables)
+            {
+                Vec vec = new(localX * 16);
+                int num1 = 11 + (__instance.isPlayerShip ? 10 : -37);
+                vec.y += num1;
+                Rect rect = new(vec.x - 1.0 + 3 + (num % 2 * 6), vec.y + (num / 2 * 8), 11, 7);
+                attachable.Render(g, rect.xy);
+                num += attachable.GetSize();
+            }
+        }
+        if (keyPrefix != "shipUpgrade_shipPreview") return;
         ShipUpgrades? shipUpgrades = null;
         if (g.state.route is MapRoute && g.state.routeOverride is ShipUpgrades upgrades1) shipUpgrades = upgrades1;
-        else if (g.state.route is Dialogue dialogue && dialogue.routeOverride is ShipUpgrades upgrades && upgrades.GetIsActuallyCrafting()) shipUpgrades = upgrades;
+        else if (g.state.route is Dialogue dialogue && dialogue.routeOverride is ShipUpgrades upgrades && (upgrades.GetIsActuallyCrafting() || upgrades.GetIsSpecialAttachSequence())) shipUpgrades = upgrades;
         if (shipUpgrades != null)
         {
             if (shipUpgrades.GetHeldAttachable() != null)
@@ -217,7 +300,7 @@ internal sealed class AttachableToPartManager
 
     private static void ShipUpgrades_Render_Postfix(ShipUpgrades __instance, G g)
     {
-        if ((g.state.route is not MapRoute || __instance.actionQueue.Count > 0 || __instance.completedActions.Count > 0) && !__instance.GetIsActuallyCrafting()) return;
+        if ((g.state.route is not MapRoute || __instance.actionQueue.Count > 0 || __instance.completedActions.Count > 0) && !__instance.GetIsActuallyCrafting() && !__instance.GetIsSpecialAttachSequence()) return;
 
         List<AttachableToPart> attachables = g.state.GetPlayerAttachables();
         int startX = g.mg.PIX_W;
@@ -265,7 +348,7 @@ internal sealed class AttachableToPartManager
                 g.state.route.SetHasCraftedHere(true);
                 g.CloseRoute(__instance);
             }
-            else if (g.state.GetPlayerAttachables().Any(a => a.UIKey() == key)) __instance.SetHeldAttachable(g.state.GetPlayerAttachables().First(a => a.UIKey() == key));
+            else if (g.state.GetPlayerAttachables().Any(a => a.UIKey() == key) || (g.state.ship.parts.Any(p => p.GetAttachables().Any(a => a.UIKey() == key)) && __instance.GetIsActuallyCrafting())) __instance.SetHeldAttachable(g.state.GetPlayerAttachables().First(a => a.UIKey() == key));
             else
             {
                 Part part = g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == key) > 0);
@@ -367,7 +450,9 @@ internal sealed class AttachableToPartManager
         => s.ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnEnd(s, c, p)));
 
     private static void AEnemyTurnAfter_Begin_Postfix(State s, Combat c)
-        => c.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnEnd(s, c, p)));
+    {
+        if (c.turn != 0) c.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnEnd(s, c, p)));
+    }
 
     private static void Ship_NormalDamage_Postfix(State s, Combat c, int? maybeWorldGridX, DamageDone __result, Ship __instance)
     {
@@ -394,8 +479,9 @@ internal sealed class AttachableToPartManager
         }
     }
 
-    private static void Combat_Make_Postfix(State s, bool doForReal, Combat __result)
+    private static void Combat_Make_Postfix(State s, AI ai, bool doForReal, Combat __result)
     {
+        AttachStuffToEnemies.Begin(s, ai, __result);
         if(doForReal)
         {
             __result.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnCombatStart(s, __result, p)));
@@ -408,7 +494,7 @@ internal sealed class AttachableToPartManager
         Ship ship = __instance.targetPlayer ? c.otherShip : s.ship;
         if (!__instance.fromDroneX.HasValue && !__instance.fromX.HasValue && !__instance.multiCannonVolley)
         {
-            ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnShipShoots(s, c, p)));
+            ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnPlayerShipShoots(s, c, p)));
         }
         if (__instance.fromX.HasValue || ship.GetPartTypeCount(PType.cannon) == 1)
         {
@@ -461,7 +547,7 @@ internal sealed class AttachableToPartManager
         => (__instance.targetPlayer ? s.ship : c.otherShip).parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnShipOverheats(s, c, p)));
 }
 
-internal static class AttachableToPartExt
+internal static partial class AttachableToPartExt
 {
     public static List<AttachableToPart> GetAttachables(this Part part)
         => ModEntry.Instance.Helper.ModData.GetOptionalModData<List<AttachableToPart>>(part, DSIS.ATPMDS) ?? [];
@@ -493,4 +579,8 @@ internal static class AttachableToPartExt
         => ModEntry.Instance.Helper.ModData.GetOptionalModData<bool>(route, DSIS.HasCraftedHere) ?? false;
     public static void SetHasCraftedHere(this Route route, bool b)
         => ModEntry.Instance.Helper.ModData.SetOptionalModData<bool>(route, DSIS.HasCraftedHere, b);
+    public static bool GetIsSpecialAttachSequence(this ShipUpgrades shipUpgrades)
+        => ModEntry.Instance.Helper.ModData.GetOptionalModData<bool>(shipUpgrades, DSIS.IsSpecialAttachSequence) ?? false;
+    public static void SetIsSpecialAttachSequence(this ShipUpgrades shipUpgrades, bool b)
+        => ModEntry.Instance.Helper.ModData.SetOptionalModData<bool>(shipUpgrades, DSIS.IsSpecialAttachSequence, b);
 }

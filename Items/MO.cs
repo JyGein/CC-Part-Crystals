@@ -13,6 +13,7 @@ public class MO : Item
 
     public override void OnShipOverheats(State state, Combat combat, Part part)
     {
+        base.OnShipOverheats(state, combat, part);
         combat.QueueImmediate(new AStatus
         {
             status = Status.tempShield,

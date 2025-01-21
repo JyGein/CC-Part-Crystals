@@ -13,6 +13,7 @@ public class GY : Item
 
     public override void OnShipMoves(State state, Combat combat, Part part)
     {
+        base.OnShipMoves(state, combat, part);
         combat.QueueImmediate(new AStatus
         {
             status = ModEntry.Instance.QuarterHeal.Status,

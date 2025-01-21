@@ -40,16 +40,21 @@ internal sealed class PartialStatusManager
 
     private static void Combat_Update_Postfix(G g, Combat __instance)
     {
-        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterEvade.Status, ModEntry.Instance.HalfEvade.Status);
-        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterTempShield.Status, ModEntry.Instance.HalfTempShield.Status);
-        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterHeal.Status, ModEntry.Instance.HalfHeal.Status);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterEvade.Status, ModEntry.Instance.HalfEvade.Status, true);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterTempShield.Status, ModEntry.Instance.HalfTempShield.Status, true);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterHeal.Status, ModEntry.Instance.HalfHeal.Status, true);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterEvade.Status, ModEntry.Instance.HalfEvade.Status, false);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterTempShield.Status, ModEntry.Instance.HalfTempShield.Status, false);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterHeal.Status, ModEntry.Instance.HalfHeal.Status, false);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.HalfTempShield.Status, Status.tempShield, false);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.HalfShield.Status, Status.shield, false);
         Partial_Heal_Handler(g, __instance);
         Partial_Enemy_Heal_Handler(g, __instance);
     }
 
-    private static void Partial_Status_Handler(G g, Combat __instance, Status partialStatus, Status fullStatus)
+    private static void Partial_Status_Handler(G g, Combat __instance, Status partialStatus, Status fullStatus, bool targetPlayer)
     {
-        int toAdd = g.state.ship.Get(partialStatus) / 2;
+        int toAdd = (targetPlayer ? g.state.ship : __instance.otherShip).Get(partialStatus) / 2;
         if (toAdd == 0)
             return;
 
@@ -64,8 +69,8 @@ internal sealed class PartialStatusManager
                 return;
 
         __instance.QueueImmediate([
-                new AStatus() { timer = 0, targetPlayer = true, status = fullStatus, statusAmount = toAdd },
-                new AStatus() { targetPlayer = true, status = partialStatus, statusAmount = -toAdd * 2 },
+                new AStatus() { timer = 0, targetPlayer = targetPlayer, status = fullStatus, statusAmount = toAdd },
+                new AStatus() { targetPlayer = targetPlayer, status = partialStatus, statusAmount = -toAdd * 2 },
             ]);
     }
 

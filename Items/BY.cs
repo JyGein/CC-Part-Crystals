@@ -13,6 +13,7 @@ public class BY : Item
 
     public override void OnPartAttacks(State state, Combat combat, Part part)
     {
+        base.OnPartAttacks(state, combat, part);
         combat.QueueImmediate([new AStatus
         {
             status = ModEntry.Instance.HalfShield.Status,

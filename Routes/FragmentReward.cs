@@ -8,8 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using PartCrystals.Fragments;
 using FMOD;
+using PartCrystals.Features;
 
-namespace PartCrystals.Features;
+namespace PartCrystals.Routes;
 
 public class FragmentReward : Route, OnMouseDown
 {
@@ -97,12 +98,12 @@ public class FragmentReward : Route, OnMouseDown
         {
             List<Fragment> fragmentPair = fragments[i];
             UIKey? key2 = new UIKey(FragmentReward_FragmentUK, i);
-            Rect? rect = new Rect(240 - (int)((double)num / 2.0), 144.0 + Math.Floor(((double)i - (double)fragments.Count / 2.0) * (double)(num2 - 2)), num, num2);
+            Rect? rect = new Rect(240 - (int)(num / 2.0), 144.0 + Math.Floor((i - fragments.Count / 2.0) * (num2 - 2)), num, num2);
             OnMouseDown onMouseDown = this;
             Box box = g.Push(key2, rect, null, autoFocus: true, noHoverSound: false, gamepadUntargetable: false, ReticleMode.Quad, onMouseDown);
             Vec xy = box.rect.xy;
             Color? boxColor;
-            Spr? id2 = (box.IsHover() ? StableSpr.buttons_artifact_on : StableSpr.buttons_artifact);
+            Spr? id2 = box.IsHover() ? StableSpr.buttons_artifact_on : StableSpr.buttons_artifact;
             double x2 = xy.x;
             double y2 = xy.y;
             Draw.Sprite(id2, x2, y2, flipX: false, flipY: false, 0.0, null, null, null, null, null);
@@ -113,8 +114,8 @@ public class FragmentReward : Route, OnMouseDown
             Vec vec = xy + new Vec(0.0, box.IsHover() ? 1 : 0);
             Vec vec2 = vec + new Vec(14.0, 14.0);
             Vec vec3 = vec2;
-            fragmentPair.WithIndex().ForEach((f) => Draw.Sprite(f.Item1.GetSprite(), (int)(vec3.x - 7.0) + (8*f.Item2), (int)(vec3.y - 7.0) + (6 * f.Item2)));
-            string locName = string.Join(" and ", fragmentPair.Select(f => $"<c={Fragment.FragmentColors[f.GetType()]}>{f.Name().Remove(f.Name().Length-9)}</c>"));
+            fragmentPair.WithIndex().ForEach((f) => Draw.Sprite(f.Item1.GetSprite(), (int)(vec3.x - 7.0) + 8 * f.Item2, (int)(vec3.y - 7.0) + 6 * f.Item2));
+            string locName = string.Join(" and ", fragmentPair.Select(f => $"<c={Fragment.FragmentColors[f.GetType()]}>{f.Name().Remove(f.Name().Length - 9)}</c>"));
             double x3 = vec.x + 32.0;
             double y3 = vec.y + 11.0;
             boxColor = Colors.black;

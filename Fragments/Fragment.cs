@@ -58,11 +58,11 @@ public class Fragment : AttachableToPart
 
     public override List<Tooltip> GetTooltips()
     {
-        List<Tooltip> list = new()
-        {
+        List<Tooltip> list =
+        [
             new TTDivider(),
             new TTText($"<c=artifact>{Name().ToUpper()}</c>\n{Desc()}")
-        };
+        ];
         if (GetExtraTooltips() != null)
         {
             list.AddRange(GetExtraTooltips()!);

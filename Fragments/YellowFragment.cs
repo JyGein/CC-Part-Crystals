@@ -13,7 +13,7 @@ public class YellowFragment : Fragment
         if (!playerOwned) return;
         combat.QueueImmediate(new AStatus
         {
-            status = ModEntry.Instance.QuarterEvade.Status,
+            status = ModEntry.Instance.HalfEvade.Status,
             statusAmount = 1,
             targetPlayer = playerOwned,
             timer = 0
@@ -23,14 +23,16 @@ public class YellowFragment : Fragment
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
         if (playerOwned) return;
+        float otherShipPos = combat.otherShip.x + (combat.otherShip.parts.Count / 2f);
+        float shipPos = state.ship.x + (state.ship.parts.Count / 2f);
         combat.QueueImmediate(new AMove
         {
-            dir = combat.otherShip.x + (combat.otherShip.parts.Count/2f) > state.ship.x + (state.ship.parts.Count/2f) ? -1 : 1,
+            dir = otherShipPos == shipPos ? 0 : (otherShipPos > shipPos ? -1 : 1),
             targetPlayer = false,
             timer = 0
         });
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => !playerOwned ? null : StatusMeta.GetTooltips(ModEntry.Instance.QuarterEvade.Status, 1);
+        => !playerOwned ? null : StatusMeta.GetTooltips(ModEntry.Instance.HalfEvade.Status, 1);
 }

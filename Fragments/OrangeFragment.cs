@@ -13,12 +13,12 @@ public class OrangeFragment : Fragment
         combat.QueueImmediate(new AStatus
         {
             status = Status.heat,
-            statusAmount = 3,
+            statusAmount = playerOwned ? 3 : 1,
             targetPlayer = !playerOwned,
             timer = 0
         });
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => StatusMeta.GetTooltips(Status.heat, 1);
+        => StatusMeta.GetTooltips(Status.heat, 3);
 }

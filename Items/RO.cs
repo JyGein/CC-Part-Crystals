@@ -13,6 +13,7 @@ public class RO : Item
 
     public override void OnPartDamages(State state, Combat combat, Part part, DamageDone damageDone, Ship ship)
     {
+        base.OnPartDamages(state, combat, part, damageDone, ship);
         combat.QueueImmediate(new AStatus
         {
             status = Status.heat,

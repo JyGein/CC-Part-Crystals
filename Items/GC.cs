@@ -13,6 +13,7 @@ public class GC : Item
 
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
+        base.OnPartHit(state, combat, part, damageDone);
         List<CardAction> list = [new AStatus
         {
             status = ModEntry.Instance.KokoroApi.OxidationStatus.Status,

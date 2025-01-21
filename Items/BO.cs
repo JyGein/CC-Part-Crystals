@@ -13,6 +13,7 @@ public class BO : Item
 
     public override void OnTurnStart(State state, Combat combat, Part part)
     {
+        base.OnTurnStart(state, combat, part);
         combat.Queue(new AStatus
         {
             status = Status.serenity,

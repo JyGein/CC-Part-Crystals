@@ -9,7 +9,20 @@ namespace PartCrystals.Fragments;
 
 public class RedFragment : Fragment
 {
-    public override void OnShipShoots(State state, Combat combat, Part part)
+    public override void OnTurnEnd(State state, Combat combat, Part part)
+    {
+        if (playerOwned) return;
+        combat.QueueImmediate(new AAttack
+        {
+            damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),
+            status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
+            statusAmount = playerOwned ? 1 : default,
+            targetPlayer = !playerOwned,
+            fromX = combat.otherShip.parts.FindIndex(p => p == part),
+            fast = true
+        });
+    }
+    public override void OnPlayerShipShoots(State state, Combat combat, Part part)
     {
         combat.QueueImmediate(new AAttack
         {
@@ -17,7 +30,7 @@ public class RedFragment : Fragment
             status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
             statusAmount = playerOwned ? 1 : default,
             targetPlayer = !playerOwned,
-            fromX = ModEntry.GetPartX(part, state, combat) ?? 0,
+            fromX = state.ship.parts.FindIndex(p => p == part),
             fast = true
         });
     }

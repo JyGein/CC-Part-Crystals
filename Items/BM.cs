@@ -13,6 +13,7 @@ public class BM : Item
 
     public override void OnCombatStart(State state, Combat combat, Part part)
     {
+        base.OnCombatStart(state, combat, part);
         combat.Queue(new AStatus
         {
             status = Status.perfectShield,

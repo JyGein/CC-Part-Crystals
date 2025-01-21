@@ -18,7 +18,7 @@ public abstract class AttachableToPart
     public virtual void OnTurnEnd(State state, Combat combat, Part part) { }
     public virtual void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone) { }
     public virtual void BeforePartHit(State state, Combat combat, Part part, int incomingDamage) { }
-    public virtual void OnShipShoots(State state, Combat combat, Part part) { }
+    public virtual void OnPlayerShipShoots(State state, Combat combat, Part part) { }
     public virtual void AlterAttackFromPart(State state, Combat combat, Part part, AAttack aAttack) { }
     public virtual void AlterHullDamage(State state, Combat combat, Ship ship, ref int amt) { }
     public virtual void OnPartAttacks(State state, Combat combat, Part part) { }

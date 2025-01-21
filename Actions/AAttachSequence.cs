@@ -1,5 +1,5 @@
 ﻿using FSPRO;
-using PartCrystals.Routes;
+using PartCrystals.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +8,14 @@ using System.Threading.Tasks;
 
 namespace PartCrystals.Actions;
 
-public class AFragmentOffering : CardAction
+public class AAttachSequence : CardAction
 {
-    public int amount = 3;
     public override Route? BeginWithRoute(G g, State s, Combat c)
     {
         timer = 0.0;
-        return new FragmentReward
-        {
-            fragments = FragmentReward.GetOffering(s, amount, 2)
-        };
+        ShipUpgrades route = new();
+        route.SetIsSpecialAttachSequence(true);
+        return route;
     }
 
     public override Icon? GetIcon(State s)

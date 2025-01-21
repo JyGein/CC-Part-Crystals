@@ -14,6 +14,7 @@ public class MM : Item
     public List<PDamMod?> OGPDamMods = [];
     public override void OnTurnStart(State state, Combat combat, Part part)
     {
+        base.OnTurnStart(state, combat, part);
         if (OGPDamMods.Count > 0)
         {
             foreach ((Part p, int i) in (playerOwned ? state.ship : combat.otherShip).parts.WithIndex().Where(p => p.Item1.type != PType.empty)) {
@@ -24,6 +25,7 @@ public class MM : Item
     }
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
+        base.OnPartHit(state, combat, part, damageDone);
         if (OGPDamMods.Count > 0) return;
         foreach ((Part p, int i) in (playerOwned ? state.ship : combat.otherShip).parts.WithIndex().Where(p => p.Item1.type != PType.empty))
         {

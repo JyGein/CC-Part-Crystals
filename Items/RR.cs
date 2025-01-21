@@ -13,6 +13,7 @@ public class RR : Item
 
     public override void AlterAttackFromPart(State state, Combat combat, Part part, AAttack aAttack)
     {
+        base.AlterAttackFromPart(state, combat, part, aAttack);
         aAttack.damage += 1;
     }
 }

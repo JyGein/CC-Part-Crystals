@@ -18,4 +18,5 @@ public static class DSIS
     public static readonly string rngFragmentOfferings = "rngFragmentOfferings";
     public static readonly string ShipUpgradesIsActuallyCrafting = "ShipUpgradesIsActuallyCrafting";
     public static readonly string HasCraftedHere = "HasCraftedHere";
+    public static readonly string IsSpecialAttachSequence = "IsSpecialAttachSequence";
 }

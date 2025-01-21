@@ -13,6 +13,7 @@ public class YO : Item
 
     public override void OnTurnStart(State state, Combat combat, Part part)
     {
+        base.OnTurnStart(state, combat, part);
         if (!playerOwned) return;
         combat.Queue([new AStatus
         {
@@ -31,6 +32,7 @@ public class YO : Item
     }
     public override void OnOtherShipTurnStart(State state, Combat combat, Part part)
     {
+        base.OnOtherShipTurnStart(state, combat, part);
         if (playerOwned) return;
         combat.Queue(new AStatus
         {

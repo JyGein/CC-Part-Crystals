@@ -13,6 +13,7 @@ public class YM : Item
 
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
+        base.OnPartHit(state, combat, part, damageDone);
         if (damageDone.hitHull)
         {
             combat.QueueImmediate([new AStatus

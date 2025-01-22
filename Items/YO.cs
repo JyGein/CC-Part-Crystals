@@ -44,5 +44,5 @@ public class YO : Item
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => !playerOwned ? StatusMeta.GetTooltips(Status.libra, 1) : [.. StatusMeta.GetTooltips(Status.evade, 2), .. StatusMeta.GetTooltips(Status.heat, 2)];
+        => !playerOwned ? StatusMeta.GetTooltips(Status.engineStall, 1) : [.. StatusMeta.GetTooltips(Status.evade, 2), .. StatusMeta.GetTooltips(Status.heat, 2)];
 }

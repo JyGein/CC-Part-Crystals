@@ -55,7 +55,7 @@ internal sealed class PartialStatusManager
     private static void Partial_Status_Handler(G g, Combat __instance, Status partialStatus, Status fullStatus, bool targetPlayer)
     {
         int toAdd = (targetPlayer ? g.state.ship : __instance.otherShip).Get(partialStatus) / 2;
-        if (toAdd == 0)
+        if (toAdd == 0 || (targetPlayer ? g.state.ship : __instance.otherShip).hull <= 0)
             return;
 
         IEnumerable<CardAction> allActions = __instance.cardActions;

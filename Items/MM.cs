@@ -17,7 +17,7 @@ public class MM : Item
         base.OnTurnStart(state, combat, part);
         if (OGPDamMods.Count > 0)
         {
-            foreach ((Part p, int i) in (playerOwned ? state.ship : combat.otherShip).parts.WithIndex().Where(p => p.Item1.type != PType.empty)) {
+            foreach ((Part p, int i) in (playerOwned ? state.ship : combat.otherShip).parts.Where(p => p.type != PType.empty).ToList().WithIndex()) {
                 p.damageModifierOverrideWhileActive = OGPDamMods[i]; 
             }
         }
@@ -27,7 +27,7 @@ public class MM : Item
     {
         base.OnPartHit(state, combat, part, damageDone);
         if (OGPDamMods.Count > 0) return;
-        foreach ((Part p, int i) in (playerOwned ? state.ship : combat.otherShip).parts.WithIndex().Where(p => p.Item1.type != PType.empty))
+        foreach ((Part p, int i) in (playerOwned ? state.ship : combat.otherShip).parts.Where(p => p.type != PType.empty).ToList().WithIndex())
         {
             OGPDamMods.Add(p.damageModifierOverrideWhileActive);
             p.damageModifierOverrideWhileActive = PDamMod.armor;

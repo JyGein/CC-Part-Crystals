@@ -94,7 +94,7 @@ internal sealed class AttachStuffToEnemies
         }
         while (fragments.Count > 0 && ship.CanAttachFragment())
         {
-            Part p = ship.parts.Where(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 1).Shuffle(s.rngShuffle).First();
+            Part p = ship.parts.Where(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 3).Shuffle(s.rngShuffle).First();
             p.SetAttachables([.. p.GetAttachables(), fragments.Pop()]);
         }
     }
@@ -107,7 +107,7 @@ internal static partial class AttachableToPartExt
     public static bool CanAttachItem(this Ship ship)
         => ship.parts.Any(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 2);
     public static bool CanAttachFragment(this Ship ship)
-        => ship.parts.Any(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 1);
+        => ship.parts.Any(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 3);
     public static T Pop<T>(this List<T> list)
     {
         T item = list.First();

@@ -506,7 +506,7 @@ internal sealed class AttachableToPartManager
     private static void AAttack_Begin_Postfix(AAttack __instance, G g, State s, Combat c)
     {
         Ship ship = __instance.targetPlayer ? c.otherShip : s.ship;
-        if (!__instance.fromDroneX.HasValue && !__instance.fromX.HasValue && !__instance.multiCannonVolley)
+        if (!__instance.fromDroneX.HasValue && !__instance.fromX.HasValue && !__instance.multiCannonVolley && !__instance.targetPlayer)
         {
             ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnPlayerShipShoots(s, c, p)));
         }

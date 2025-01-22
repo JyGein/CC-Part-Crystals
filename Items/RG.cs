@@ -14,7 +14,7 @@ public class RG : Item
     public override void OnPartDamages(State state, Combat combat, Part part, DamageDone damageDone, Ship ship)
     {
         base.OnPartDamages(state, combat, part, damageDone, ship);
-        if (damageDone.hitHull)
+        if (damageDone.hitHull && (playerOwned ? combat.otherShip : state.ship).Get(Status.perfectShield) <= 0)
         {
             ship.DirectHullDamage(state, combat, 2);
         }

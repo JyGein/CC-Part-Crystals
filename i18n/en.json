@@ -36,7 +36,7 @@
     },
     "RedFragment": {
       "name": "Red Fragment",
-      "playerDesc": "This <c=part>part</c> <c=action>attacks</c> for 0 and applies <c=status>HALF DAMAGE</c> when your ship <c=action>attacks</c>.",
+      "playerDesc": "This <c=part>part</c> <c=action>attacks</c> for 0 and applies <c=status>HALF DAMAGE</c> at the end of every turn.",
       "enemyDesc": "This <c=part>part</c> <c=action>attacks</c> for 1 at the end of every turn."
     },
     "GreenFragment": {

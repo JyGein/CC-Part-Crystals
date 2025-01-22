@@ -89,12 +89,12 @@ internal sealed class AttachStuffToEnemies
     {
         while (items.Count > 0 && ship.CanAttachItem())
         {
-            Part p = ship.parts.Where(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 2).Shuffle(s.rngShuffle).First();
+            Part p = ship.parts.Where(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 2 && p.type != PType.empty).Shuffle(s.rngShuffle).First();
             p.SetAttachables([.. p.GetAttachables(), items.Pop()]);
         }
         while (fragments.Count > 0 && ship.CanAttachFragment())
         {
-            Part p = ship.parts.Where(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 3).Shuffle(s.rngShuffle).First();
+            Part p = ship.parts.Where(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 3 && p.type != PType.empty).Shuffle(s.rngShuffle).First();
             p.SetAttachables([.. p.GetAttachables(), fragments.Pop()]);
         }
     }
@@ -105,9 +105,9 @@ internal static partial class AttachableToPartExt
     public static int GetShipMaxSize(this Ship ship)
         => ship.parts.Count(p => p.type != PType.empty) * 4;
     public static bool CanAttachItem(this Ship ship)
-        => ship.parts.Any(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 2);
+        => ship.parts.Where(p => p.type != PType.empty).Any(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 2);
     public static bool CanAttachFragment(this Ship ship)
-        => ship.parts.Any(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 3);
+        => ship.parts.Where(p => p.type != PType.empty).Any(p => p.GetAttachables().Select(a => a.GetSize()).Sum() <= 3);
     public static T Pop<T>(this List<T> list)
     {
         T item = list.First();

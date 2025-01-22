@@ -19,7 +19,7 @@ public class RedFragment : Fragment
                 status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
                 statusAmount = playerOwned ? 1 : default,
                 targetPlayer = !playerOwned,
-                fromX = combat.otherShip.parts.FindIndex(p => p == part),
+                fromX = state.ship.parts.FindIndex(p => p == part),
                 fast = true
             });
         }

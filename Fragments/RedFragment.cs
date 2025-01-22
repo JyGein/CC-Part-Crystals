@@ -11,7 +11,7 @@ public class RedFragment : Fragment
 {
     public override void OnTurnEnd(State state, Combat combat, Part part)
     {
-        if (playerOwned) return;
+        //if (playerOwned) return;
         combat.Queue(new AAttack
         {
             damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),
@@ -24,6 +24,7 @@ public class RedFragment : Fragment
     }
     public override void OnPlayerShipShoots(State state, Combat combat, Part part)
     {
+        return;
         combat.QueueImmediate(new AAttack
         {
             damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),

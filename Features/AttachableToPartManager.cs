@@ -283,7 +283,8 @@ internal sealed class AttachableToPartManager
                 int num1 = 11;
                 vec.y += num1;
                 Rect rect = new(vec.x - 1.0 + 3 + (num % 2 * 6), vec.y + (num / 2 * 8), 11, 7);
-                attachable.Render(g, rect.xy, false, shipUpgrades);
+                Color? color = attachable == shipUpgrades.GetHeldAttachable() ? Colors.smoke[0] : null;
+                attachable.Render(g, rect.xy, false, shipUpgrades, color);
                 num += attachable.GetSize();
             }
         }
@@ -340,15 +341,28 @@ internal sealed class AttachableToPartManager
             if (__instance.GetHeldAttachable() != null && __instance.GetHeldAttachable()!.UIKey() == key) __instance.SetHeldAttachable(null);
             else if (__instance.GetIsActuallyCrafting() && __instance.GetHeldAttachable() != null)
             {
-                Fragment fragment1 = (Fragment)(g.state.GetPlayerAttachables().FirstOrDefault(f => f.UIKey() == __instance.GetHeldAttachable()!.UIKey()) ?? g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == __instance.GetHeldAttachable()!.UIKey()) > 0).GetAttachables().FirstOrDefault(f => f.UIKey() == key)!);
-                Fragment fragment2 = (Fragment)(g.state.GetPlayerAttachables().FirstOrDefault(f => f.UIKey() == key) ?? g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == key) > 0).GetAttachables().FirstOrDefault(f => f.UIKey() == key)!);
+                Fragment fragment1 = (Fragment)(__instance.GetHeldAttachable()!);
+                Fragment fragment2 = (Fragment)(g.state.GetPlayerAttachables()
+                    .FirstOrDefault(
+                        f => f.UIKey() == key
+                    ) ?? g.state.ship.parts
+                    .First(
+                        p => p.GetAttachables()
+                            .Any(
+                                a => a.UIKey() == key
+                            )
+                    ).GetAttachables()
+                        .First(
+                            a => a.UIKey() == key
+                        )
+                );
                 Item item = (Item)AccessTools.CreateInstance(ModEntry.Instance.fragmentFragmentToItem[fragment1.GetType()][fragment2.GetType()]);
                 g.state.SetPlayerAttachables([.. g.state.GetPlayerAttachables().Where(a => a.UIKey() != key && a.UIKey() != __instance.GetHeldAttachable()!.UIKey()), item]);
                 g.state.ship.parts.ForEach(p => p.SetAttachables(p.GetAttachables().Where(a => a.UIKey() != key && a.UIKey() != __instance.GetHeldAttachable()!.UIKey()).ToList()));
                 g.state.route.SetHasCraftedHere(true);
                 g.CloseRoute(__instance);
             }
-            else if (g.state.GetPlayerAttachables().Any(a => a.UIKey() == key) || (g.state.ship.parts.Any(p => p.GetAttachables().Any(a => a.UIKey() == key)) && __instance.GetIsActuallyCrafting())) __instance.SetHeldAttachable(g.state.GetPlayerAttachables().First(a => a.UIKey() == key));
+            else if (g.state.GetPlayerAttachables().Any(a => a.UIKey() == key) || (g.state.ship.parts.Any(p => p.GetAttachables().Any(a => a.UIKey() == key)) && __instance.GetIsActuallyCrafting())) __instance.SetHeldAttachable(g.state.GetPlayerAttachables().Any(a => a.UIKey() == key) ? g.state.GetPlayerAttachables().First(a => a.UIKey() == key) : g.state.ship.parts.First(p => p.GetAttachables().Any(a => a.UIKey() == key)).GetAttachables().First(a => a.UIKey() == key));
             else
             {
                 Part part = g.state.ship.parts.First(p => p.GetAttachables().Count(a => a.UIKey() == key) > 0);
@@ -402,7 +416,7 @@ internal sealed class AttachableToPartManager
     private static void Events_NewShop_Postfix(State s, ref List<Choice> __result)
     {
         if (s.GetPlayerAttachables().Count(a => a is Fragment) + s.ship.parts.SelectMany(p => p.GetAttachables()).Count(a => a is Fragment) < 2 || s.route.GetHasCraftedHere()) return;
-        __result.Add(new Choice
+        __result.Insert(__result.Count-2, new Choice
         {
             label = ModEntry.Instance.Localizations.Localize(["dialogue", "CraftanItem"]),
             key = "NewShop",
@@ -583,4 +597,9 @@ internal static partial class AttachableToPartExt
         => ModEntry.Instance.Helper.ModData.GetOptionalModData<bool>(shipUpgrades, DSIS.IsSpecialAttachSequence) ?? false;
     public static void SetIsSpecialAttachSequence(this ShipUpgrades shipUpgrades, bool b)
         => ModEntry.Instance.Helper.ModData.SetOptionalModData<bool>(shipUpgrades, DSIS.IsSpecialAttachSequence, b);
+    public static Fragment ChangedPlayerOwned(this Fragment fragment, bool playerOwned = false)
+    {
+        fragment.playerOwned = playerOwned;
+        return fragment;
+    }
 }

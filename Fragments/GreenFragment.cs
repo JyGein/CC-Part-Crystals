@@ -15,7 +15,7 @@ public class GreenFragment : Fragment
             {
                 status = ModEntry.Instance.HalfHeal.Status,
                 statusAmount = 1,
-                targetPlayer = true,
+                targetPlayer = playerOwned,
                 timer = 0
             } :
             new AHeal

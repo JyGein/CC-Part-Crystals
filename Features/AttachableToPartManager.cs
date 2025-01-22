@@ -465,7 +465,7 @@ internal sealed class AttachableToPartManager
 
     private static void AEnemyTurnAfter_Begin_Postfix(State s, Combat c)
     {
-        if (c.turn != 0) c.otherShip.parts.ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnEnd(s, c, p)));
+        if (c.turn != 0) c.otherShip.parts.Reverse<Part>().ToList().ForEach(p => p.GetAttachables().ForEach(a => a.OnTurnEnd(s, c, p)));
     }
 
     private static void Ship_NormalDamage_Postfix(State s, Combat c, int? maybeWorldGridX, DamageDone __result, Ship __instance)

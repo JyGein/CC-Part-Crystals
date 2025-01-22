@@ -11,16 +11,30 @@ public class RedFragment : Fragment
 {
     public override void OnTurnEnd(State state, Combat combat, Part part)
     {
-        //if (playerOwned) return;
-        combat.Queue(new AAttack
+        if (playerOwned)
         {
-            damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),
-            status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
-            statusAmount = playerOwned ? 1 : default,
-            targetPlayer = !playerOwned,
-            fromX = combat.otherShip.parts.FindIndex(p => p == part),
-            fast = true
-        });
+            combat.Queue(new AAttack
+            {
+                damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),
+                status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
+                statusAmount = playerOwned ? 1 : default,
+                targetPlayer = !playerOwned,
+                fromX = combat.otherShip.parts.FindIndex(p => p == part),
+                fast = true
+            });
+        }
+        else
+        {
+            combat.QueueImmediate(new AAttack
+            {
+                damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),
+                status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
+                statusAmount = playerOwned ? 1 : default,
+                targetPlayer = !playerOwned,
+                fromX = combat.otherShip.parts.FindIndex(p => p == part),
+                fast = true
+            });
+        }
     }
     public override void OnPlayerShipShoots(State state, Combat combat, Part part)
     {

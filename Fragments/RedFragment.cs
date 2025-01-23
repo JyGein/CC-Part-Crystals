@@ -39,6 +39,7 @@ public class RedFragment : Fragment
     public override void OnPlayerShipShoots(State state, Combat combat, Part part)
     {
         return;
+#pragma warning disable CS0162 // Unreachable code detected
         combat.QueueImmediate(new AAttack
         {
             damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),
@@ -48,6 +49,7 @@ public class RedFragment : Fragment
             fromX = state.ship.parts.FindIndex(p => p == part),
             fast = true
         });
+#pragma warning restore CS0162 // Unreachable code detected
     }
 
     public override List<Tooltip>? GetExtraTooltips()

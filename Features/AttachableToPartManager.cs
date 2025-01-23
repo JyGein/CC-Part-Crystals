@@ -341,7 +341,7 @@ internal sealed class AttachableToPartManager
             if (__instance.GetHeldAttachable() != null && __instance.GetHeldAttachable()!.UIKey() == key) __instance.SetHeldAttachable(null);
             else if (__instance.GetIsActuallyCrafting() && __instance.GetHeldAttachable() != null)
             {
-                Fragment fragment1 = (Fragment)(__instance.GetHeldAttachable()!);
+                Fragment fragment1 = (Fragment)__instance.GetHeldAttachable()!;
                 Fragment fragment2 = (Fragment)(g.state.GetPlayerAttachables()
                     .FirstOrDefault(
                         f => f.UIKey() == key

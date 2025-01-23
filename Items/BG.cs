@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PartCrystals.Fragments;
 
-public class BG : Item
+public class GB : Item
 {
     public override List<Type> GetBaseFragmentTypes()
         => [typeof(BlueFragment), typeof(GreenFragment)];

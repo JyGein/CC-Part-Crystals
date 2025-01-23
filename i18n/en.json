@@ -71,7 +71,7 @@
       "playerDesc": "<c=action>Attacks</c> from this <c=part>part</c> pierce.",
       "enemyDesc": "<c=action>Attacks</c> from this <c=part>part</c> pierce."
     },
-    "BG": {
+    "GB": {
       "name": "BG",
       "playerDesc": "When this <c=part>part</c> takes hull damage gain 1 <c=hull>max hull</c>.",
       "enemyDesc": "When this <c=part>part</c> takes hull damage gain 1 <c=hull>max hull</c>."

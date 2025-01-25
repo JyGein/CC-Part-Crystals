@@ -37,7 +37,7 @@
     "RedFragment": {
       "name": "Red Fragment",
       "playerDesc": "This <c=part>part</c> <c=action>attacks</c> for 0 and applies <c=status>HALF DAMAGE</c> at the end of every turn.",
-      "enemyDesc": "This <c=part>part</c> <c=action>attacks</c> for 1 at the end of every turn."
+      "enemyDesc": "This <c=part>part</c> <c=action>attacks</c> for 0 and applies <c=status>HALF DAMAGE</c> at the end of every turn."
     },
     "GreenFragment": {
       "name": "Green Fragment",
@@ -73,13 +73,13 @@
     },
     "GB": {
       "name": "BG",
-      "playerDesc": "When this <c=part>part</c> takes hull damage gain 1 <c=hull>max hull</c> and heal 1 <c=hull>.",
-      "enemyDesc": "When this <c=part>part</c> takes hull damage gain 1 <c=hull>max hull</c> and heal 1 <c=hull>."
+      "playerDesc": "When this <c=part>part</c> takes hull damage gain 1 <c=hull>max hull</c> and heal 1<c=hull>.",
+      "enemyDesc": "When this <c=part>part</c> takes hull damage gain 1 <c=hull>max hull</c> and heal 1<c=hull>."
     },
     "BY": {
       "name": "BY",
       "playerDesc": "When this <c=part>part</c> <c=action>attacks</c> gain 1 <c=status>HALF SHIELD</c> and 1 <c=status>HALF EVADE</c>.",
-      "enemyDesc": "When this <c=part>part</c> <c=action>attacks</c> gain 1 <c=status>HALF SHIELD</c> and 1 <c=status>HALF EVADE</c>."
+      "enemyDesc": "Gain 1 <c=status>HALF SHIELD</c> when this ship moves."
     },
     "BM": {
       "name": "BM",
@@ -119,7 +119,7 @@
     "RO": {
       "name": "RO",
       "playerDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage they give 3 <c=status>HEAT</c>.",
-      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage they give 3 <c=status>HEAT</c>."
+      "enemyDesc": "When <c=action>attacks</c> from this <c=part>part</c> deal damage they give 1 <c=status>HEAT</c>."
     },
     "GY": {
       "name": "GY",

@@ -13,7 +13,7 @@ namespace PartCrystals.Features;
 
 internal sealed class AttachStuffToEnemies
 {
-    public static void Begin(State s, AI ai, Combat c)
+    public static void Begin(State s, AI ai, Combat c, bool railCannon = false)
     {
         int itemNum = 0;
         switch (s.map)
@@ -215,36 +215,50 @@ internal sealed class AttachStuffToEnemies
                 parts[7].SetAttachables([items2[3]]);
                 break;
             case RailCannon:
-                switch(c.otherShip.Get(Status.survive))
+                if (railCannon)
                 {
-                    case int x when x >= 2:
-                        parts[0].SetAttachables([new MM()]);
-                        parts[1].SetAttachables([new GreenFragment()]);
-                        parts[2].SetAttachables([new GreenFragment()]);
-                        parts[3].SetAttachables([new RedFragment()]);
-                        parts[5].SetAttachables([new MagentaFragment()]);
-                        parts[7].SetAttachables([new RedFragment()]);
-                        parts[8].SetAttachables([new BC()]);
-                        break;
-                    case int x when x == 1:
-                        parts[1].SetAttachables([new BC()]);
-                        parts[3].SetAttachables([new RedFragment()]);
-                        parts[4].SetAttachables([new MagentaFragment()]);
-                        parts[6].SetAttachables([new GreenFragment()]);
-                        parts[7].SetAttachables([new GreenFragment()]);
-                        parts[8].SetAttachables([new RedFragment()]);
-                        parts[9].SetAttachables([new RedFragment()]);
-                        break;
-                    case int x when x <= 0:
-                        parts[1].SetAttachables([new RedFragment()]);
-                        parts[2].SetAttachables([new RedFragment()]);
-                        parts[3].SetAttachables([new RedFragment()]);
-                        parts[4].SetAttachables([new RedFragment()]);
-                        parts[5].SetAttachables([new RedFragment()]);
-                        parts[6].SetAttachables([new RedFragment()]);
-                        parts[7].SetAttachables([new RedFragment()]);
-                        parts[10].SetAttachables([new BC()]);
-                        break;
+                    switch (c.otherShip.Get(Status.survive))
+                    {
+                        case int x when x >= 2:
+                            parts[0].SetAttachables([new MM()]);
+                            parts[1].SetAttachables([new GreenFragment()]);
+                            parts[2].SetAttachables([new GreenFragment()]);
+                            parts[3].SetAttachables([new RedFragment()]);
+                            parts[5].SetAttachables([new MagentaFragment()]);
+                            parts[7].SetAttachables([new RedFragment()]);
+                            parts[8].SetAttachables([new BC()]);
+                            break;
+                        case int x when x == 1:
+                            parts[1].SetAttachables([new BC()]);
+                            parts[3].SetAttachables([new RedFragment()]);
+                            parts[4].SetAttachables([new MagentaFragment()]);
+                            parts[6].SetAttachables([new GreenFragment()]);
+                            parts[7].SetAttachables([new GreenFragment()]);
+                            parts[8].SetAttachables([new RedFragment()]);
+                            parts[9].SetAttachables([new RedFragment()]);
+                            break;
+                        case int x when x <= 0:
+                            parts[1].SetAttachables([new RedFragment()]);
+                            parts[2].SetAttachables([new RedFragment()]);
+                            parts[3].SetAttachables([new RedFragment()]);
+                            parts[4].SetAttachables([new RedFragment()]);
+                            parts[5].SetAttachables([new RedFragment()]);
+                            parts[6].SetAttachables([new RedFragment()]);
+                            parts[7].SetAttachables([new RedFragment()]);
+                            parts[10].SetAttachables([new BC()]);
+                            break;
+                    }
+                }
+                else
+                {
+                    parts[0].SetAttachables([new MM()]);
+                    parts[1].SetAttachables([new GreenFragment()]);
+                    parts[2].SetAttachables([new GreenFragment()]);
+                    parts[3].SetAttachables([new RedFragment()]);
+                    parts[5].SetAttachables([new MagentaFragment()]);
+                    parts[7].SetAttachables([new RedFragment()]);
+                    parts[8].SetAttachables([new BC()]);
+                    break;
                 }
                 break;
             case AsteroidBoss:

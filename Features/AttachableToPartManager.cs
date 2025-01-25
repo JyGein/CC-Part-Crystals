@@ -177,7 +177,7 @@ internal sealed class AttachableToPartManager
         );
     }
 
-    private static void ARailCannonStartPhase_Begin_Postfix(State s, Combat c) { if (c.otherShip.ai is RailCannon railCannon) AttachStuffToEnemies.Begin(s, railCannon, c); }
+    private static void ARailCannonStartPhase_Begin_Postfix(State s, Combat c) { if (c.otherShip.ai is RailCannon railCannon) AttachStuffToEnemies.Begin(s, railCannon, c, true); }
 
     private static void Dialogue_GetMusic_Postfix(Dialogue __instance, ref MusicState? __result)
     {

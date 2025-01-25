@@ -17,7 +17,7 @@ public class RO : Item
         combat.QueueImmediate(new AStatus
         {
             status = Status.heat,
-            statusAmount = 3,
+            statusAmount = playerOwned ? 3 : 1,
             targetPlayer = !playerOwned,
             timer = 0
         });

@@ -171,7 +171,13 @@ internal sealed class AttachableToPartManager
             original: AccessTools.DeclaredMethod(typeof(Dialogue), nameof(Dialogue.GetMusic)),
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Dialogue_GetMusic_Postfix))
         );
+        ModEntry.Instance.Harmony.Patch(
+            original: AccessTools.DeclaredMethod(typeof(ARailCannonStartPhase), nameof(ARailCannonStartPhase.Begin)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(ARailCannonStartPhase_Begin_Postfix))
+        );
     }
+
+    private static void ARailCannonStartPhase_Begin_Postfix(State s, Combat c) { if (c.otherShip.ai is RailCannon railCannon) AttachStuffToEnemies.Begin(s, railCannon, c); }
 
     private static void Dialogue_GetMusic_Postfix(Dialogue __instance, ref MusicState? __result)
     {
@@ -528,7 +534,7 @@ internal sealed class AttachableToPartManager
     {
         int? x = __instance.GetFromX(s, c);
         Ship ship = __instance.targetPlayer ? c.otherShip : s.ship;
-        if (x.HasValue || ship.GetPartTypeCount(PType.cannon) == 1)
+        if (x.HasValue || (ship.GetPartTypeCount(PType.cannon) == 1 && !__instance.targetPlayer))
         {
             Part? part = ship.GetPartAtLocalX(x.GetValueOrDefault());
             if (part != null)

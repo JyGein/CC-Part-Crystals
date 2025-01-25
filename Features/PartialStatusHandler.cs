@@ -26,30 +26,27 @@ internal sealed class PartialStatusManager
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Combat_Update_Postfix))
         );
         ModEntry.Instance.Harmony.Patch(
-            original: AccessTools.DeclaredMethod(typeof(G), nameof(G.Render)),
-            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(G_Render_Postfix))
+            original: AccessTools.DeclaredMethod(typeof(AStatus), nameof(AStatus.Begin)),
+            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AStatus_Begin_Postfix))
         );
     }
 
-    private static void G_Render_Postfix(double deltaTime, G __instance)
+    private static void AStatus_Begin_Postfix(G g, State s, Combat c)
     {
-        //ModEntry.Instance.Logger.LogInformation(__instance.state.route.GetType().Name);
-        //if (__instance.state.routeOverride == null) return;
-        //ModEntry.Instance.Logger.LogInformation(__instance.state.routeOverride!.GetType().Name);
+        Partial_Status_Handler(g, c, ModEntry.Instance.QuarterHeal.Status, ModEntry.Instance.HalfHeal.Status, true);
+        Partial_Status_Handler(g, c, ModEntry.Instance.QuarterHeal.Status, ModEntry.Instance.HalfHeal.Status, false);
+        Partial_Heal_Handler(g, c);
+        Partial_Enemy_Heal_Handler(g, c);
     }
 
     private static void Combat_Update_Postfix(G g, Combat __instance)
     {
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterEvade.Status, ModEntry.Instance.HalfEvade.Status, true);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterTempShield.Status, ModEntry.Instance.HalfTempShield.Status, true);
-        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterHeal.Status, ModEntry.Instance.HalfHeal.Status, true);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterEvade.Status, ModEntry.Instance.HalfEvade.Status, false);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterTempShield.Status, ModEntry.Instance.HalfTempShield.Status, false);
-        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterHeal.Status, ModEntry.Instance.HalfHeal.Status, false);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.HalfTempShield.Status, Status.tempShield, false);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.HalfShield.Status, Status.shield, false);
-        Partial_Heal_Handler(g, __instance);
-        Partial_Enemy_Heal_Handler(g, __instance);
     }
 
     private static void Partial_Status_Handler(G g, Combat __instance, Status partialStatus, Status fullStatus, bool targetPlayer)
@@ -92,7 +89,7 @@ internal sealed class PartialStatusManager
                 return;
 
         __instance.QueueImmediate([
-            new AHeal() { timer = 0, targetPlayer = true, healAmount = toAdd },
+                new AHeal() { timer = 0, targetPlayer = true, healAmount = toAdd },
                 new AStatus() { targetPlayer = true, status = partialStatus, statusAmount = -toAdd * 2 },
             ]);
     }
@@ -115,7 +112,7 @@ internal sealed class PartialStatusManager
                 return;
 
         __instance.QueueImmediate([
-            new AHeal() { timer = 0, targetPlayer = false, healAmount = toAdd },
+                new AHeal() { timer = 0, targetPlayer = false, healAmount = toAdd },
                 new AStatus() { targetPlayer = false, status = partialStatus, statusAmount = -toAdd * 2 },
             ]);
     }

@@ -15,10 +15,10 @@ public class RedFragment : Fragment
         {
             combat.Queue(new AAttack
             {
-                damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),
-                status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
-                statusAmount = playerOwned ? 1 : default,
-                targetPlayer = !playerOwned,
+                damage = Card.GetActualDamage(state, 0, false),
+                status = ModEntry.Instance.HalfDamage.Status,
+                statusAmount = 1,
+                targetPlayer = false,
                 fromX = state.ship.parts.FindIndex(p => p == part),
                 fast = true
             });
@@ -27,10 +27,10 @@ public class RedFragment : Fragment
         {
             combat.QueueImmediate(new AAttack
             {
-                damage = Card.GetActualDamage(state, playerOwned ? 0 : 1, !playerOwned),
-                status = playerOwned ? ModEntry.Instance.HalfDamage.Status : null,
-                statusAmount = playerOwned ? 1 : default,
-                targetPlayer = !playerOwned,
+                damage = Card.GetActualDamage(state, 0, true),
+                status = ModEntry.Instance.HalfDamage.Status,
+                statusAmount = 1,
+                targetPlayer = true,
                 fromX = combat.otherShip.parts.FindIndex(p => p == part),
                 fast = true
             });

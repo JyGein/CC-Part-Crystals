@@ -21,32 +21,32 @@ Cyan(C)		- 2 Oxidize enemy when part is shot - 3 Oxidize player when shot
 Orange(O)	- 3 Heat opponent when part is shot
 
 Items:
-BR - Attacks from this part pierce
+/BR - Attacks from this part pierce
 /BG - When this part takes hull damage +1 max hull
-BY - When this part shoots +1/2 shield +1/2 evade 				- gain 1/2 shield when you move
-/BM - At start of combat gain 1 perfect shield
-BC - Prevent 1 Hull damage a turn
-BO - Gain 2 Serenity at start of turn
-/RG - When attacks from this part deal Hull Damage deal 2 more
-RY - This part fires for 1/2 when you move
+/BY - When this part shoots +1/2 shield +1/2 evade 				- gain 1/2 shield when you move
+//BM - At start of combat gain 1 perfect shield
+/BC - Prevent 1 Hull damage a turn
+/BO - Gain 2 Serenity at start of turn
+///RG - When attacks from this part deal Hull Damage deal 2 more
+//RY - This part fires for 1/2 when you move
 /RM - At start of turn gain 1 Flux
-RC - Shots from this part give 3 Oxidize
+/RC - Shots from this part give 3 Oxidize
 /RO - Shots from this part give 3 Heat
 /GY - Heal 1/4 health each movement
-GM - Heal 1/4 and +5 Temp Shield when part is shot
-GC - Oxidize = 0 and -1 Corrode when part is shot
-GO - Heat = 0 and +1 Serenity when part is shot
-/YM - +3 Evade & +5 Temp Shield When this part takes hull damage	- +5 Temp Shield and engine lock player when this part takes hull damage
-YC - When the enemy moves they gain 1 Oxidize
-//YO - +2 Evade +2 Heat at start of turn							- Engine stall player at start of turn
-MC - When part is shot while having Temp Shield 4 Oxidize enemy	
-MO - When you overheat +5 Temp Shield
+/GM - Heal 1/4 and +5 Temp Shield when part is shot
+/GC - Oxidize = 0 and -1 Corrode when part is shot
+/GO - Heat = 0 and +1 Serenity when part is shot
+//YM - +3 Evade & +5 Temp Shield When this part takes hull damage	- +5 Temp Shield and engine lock player when this part takes hull damage
+/YC - When the enemy moves they gain 1 Oxidize
+///YO - +2 Evade +2 Heat at start of turn							- Engine stall player at start of turn
+//MC - When part is shot while having Temp Shield 4 Oxidize enemy	
+//MO - When you overheat +5 Temp Shield
 //CO - Hull damage opponent 1 when part is shot
-/BB - Part becomes Armored
-/RR - Shots from this part deal +1 Damage
+//BB - Part becomes Armored
+///RR - Shots from this part deal +1 Damage
 /GG - +3 Max health while applied
-YY - Gain 1 autododge right at start of turn
-/MM - When part is shot all parts become Armored for the turn
+/YY - Gain 1 autododge right at start of turn
+//MM - When part is shot all parts become Armored for the turn
 /CC - 3 Oxidize opponent when part is shot
 /OO - Damage opponent 2 when part is shot
 

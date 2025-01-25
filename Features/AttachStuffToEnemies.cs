@@ -5,6 +5,7 @@ using PartCrystals.Fragments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -83,7 +84,7 @@ internal sealed class AttachStuffToEnemies
                 parts[3].SetAttachables([new OrangeFragment()]);
                 parts[4].SetAttachables([]);
                 parts[5].SetAttachables([new RedFragment()]);
-                parts[5].SetAttachables([new YO()]);
+                parts[6].SetAttachables([new YO()]);
                 break;
             case SimpleMissiler:
                 parts[0].SetAttachables([new YellowFragment()]);
@@ -145,13 +146,159 @@ internal sealed class AttachStuffToEnemies
                 parts[9].SetAttachables([]);
                 parts[10].SetAttachables([new RedFragment()]);
                 break;
-            case LightFighter:
-                List<Fragment> fragments = ModEntry.Instance.fragmentTypes.Select(t => (Fragment)AccessTools.CreateInstance(t)).ToList();
-                List<Item> items = [];
-                ThrowAttachablesOntoShip(items, fragments, c.otherShip, s);
+            case LightFighterZone2:
+                parts[0].SetAttachables([new YellowFragment()]);
+                parts[1].SetAttachables([new BlueFragment()]);
+                parts[2].SetAttachables([new RR()]);
+                parts[3].SetAttachables([new MO()]);
+                parts[4].SetAttachables([new YellowFragment()]);
                 break;
-            default:
-                List<Fragment> fragments1 = GetFragments(s, c);
+            case GoliathDefender:
+                parts[0].SetAttachables([new BY()]);
+                parts[1].SetAttachables([new BR()]);
+                parts[2].SetAttachables([]);
+                parts[3].SetAttachables([]);
+                parts[4].SetAttachables([]);
+                parts[5].SetAttachables([new BY()]);
+                break;
+            case BinaryBaddie:
+                parts[0].SetAttachables([new BlueFragment()]);
+                parts[1].SetAttachables([new RedFragment()]);
+                parts[2].SetAttachables([]);
+                parts[4].SetAttachables([new GM(), new YellowFragment()]);
+                parts[5].SetAttachables([new GM(), new YellowFragment(), new YellowFragment()]);
+                break;
+            case WideMissiler:
+                List<int> fragPos = new List<int>([1, 2, 3, 4]).Shuffle(s.rngAi).Take(2).ToList();
+                parts[0].SetAttachables([new YellowFragment(), .. (List<AttachableToPart>)(fragPos.Contains(1) ? [new RedFragment()] : [])]);
+                parts[1].SetAttachables([new GO()]);
+                parts[2].SetAttachables(fragPos.Contains(2) ? [new BlueFragment()] : []);
+                parts[3].SetAttachables(fragPos.Contains(3) ? [new BlueFragment()] : []);
+                parts[4].SetAttachables([new CG()]);
+                parts[5].SetAttachables([new YellowFragment(), .. (List<AttachableToPart>)(fragPos.Contains(4) ? [new RedFragment()] : [])]);
+                break;
+            case LockdownBruiser:
+                parts[0].SetAttachables([new YC()]);
+                parts[1].SetAttachables([new RedFragment()]);
+                parts[2].SetAttachables([new MagentaFragment(), new BlueFragment(), new GreenFragment()]);
+                parts[3].SetAttachables([new YO()]);
+                break;
+            case OxygenLeakGuy:
+                parts[0].SetAttachables([new RC()]);
+                parts[1].SetAttachables([new MagentaFragment(), new MagentaFragment()]);
+                parts[3].SetAttachables([new MagentaFragment(), new MagentaFragment()]);
+                parts[5].SetAttachables([new RC()]);
+                break;
+            case WideCruiserAlt:
+                parts[0].SetAttachables([new RY()]);
+                parts[1].SetAttachables([new GreenFragment()]);
+                parts[2].SetAttachables([new BlueFragment()]);
+                parts[3].SetAttachables([new MagentaFragment()]);
+                parts[4].SetAttachables([new RedFragment()]);
+                parts[5].SetAttachables([new MagentaFragment()]);
+                parts[6].SetAttachables([new BlueFragment()]);
+                parts[7].SetAttachables([new GreenFragment()]);
+                parts[8].SetAttachables([new RY()]);
+                break;
+            case Knight:
+                parts[0].SetAttachables([new YellowFragment()]);
+                parts[1].SetAttachables([new RedFragment()]);
+                parts[2].SetAttachables([new YM(), new CO()]);
+                parts[3].SetAttachables([new BlueFragment()]);
+                parts[4].SetAttachables([new YellowFragment()]);
+                break;
+            case CrystalMiniboss:
+                List<Item> items2 = GetItems(s, c, 4);
+                parts[1].SetAttachables([items2[0]]);
+                parts[3].SetAttachables([items2[1]]);
+                parts[5].SetAttachables([items2[2]]);
+                parts[7].SetAttachables([items2[3]]);
+                break;
+            case RailCannon:
+                switch(c.otherShip.Get(Status.survive))
+                {
+                    case int x when x >= 2:
+                        parts[0].SetAttachables([new MM()]);
+                        parts[1].SetAttachables([new GreenFragment()]);
+                        parts[2].SetAttachables([new GreenFragment()]);
+                        parts[3].SetAttachables([new RedFragment()]);
+                        parts[5].SetAttachables([new MagentaFragment()]);
+                        parts[7].SetAttachables([new RedFragment()]);
+                        parts[8].SetAttachables([new BC()]);
+                        break;
+                    case int x when x == 1:
+                        parts[1].SetAttachables([new BC()]);
+                        parts[3].SetAttachables([new RedFragment()]);
+                        parts[4].SetAttachables([new MagentaFragment()]);
+                        parts[6].SetAttachables([new GreenFragment()]);
+                        parts[7].SetAttachables([new GreenFragment()]);
+                        parts[8].SetAttachables([new RedFragment()]);
+                        parts[9].SetAttachables([new RedFragment()]);
+                        break;
+                    case int x when x <= 0:
+                        parts[1].SetAttachables([new RedFragment()]);
+                        parts[2].SetAttachables([new RedFragment()]);
+                        parts[3].SetAttachables([new RedFragment()]);
+                        parts[4].SetAttachables([new RedFragment()]);
+                        parts[5].SetAttachables([new RedFragment()]);
+                        parts[6].SetAttachables([new RedFragment()]);
+                        parts[7].SetAttachables([new RedFragment()]);
+                        parts[10].SetAttachables([new BC()]);
+                        break;
+                }
+                break;
+            case AsteroidBoss:
+                parts[0].SetAttachables([new YellowFragment(), new MagentaFragment()]);
+                parts[1].SetAttachables([new MM()]);
+                parts[2].SetAttachables([new MC()]);
+                parts[3].SetAttachables([new YellowFragment(), new MagentaFragment()]);
+                break;
+            case PirateBoss:
+                parts[0].SetAttachables([new BO(), new YellowFragment(), new YellowFragment()]);
+                parts[1].SetAttachables([new RedFragment()]);
+                parts[2].SetAttachables([new RG()]);
+                parts[3].SetAttachables([]);
+                parts[4].SetAttachables([new RedFragment()]);
+                parts[5].SetAttachables([new RY()]);
+                parts[6].SetAttachables([new RY()]);
+                parts[7].SetAttachables([new RG()]);
+                parts[8].SetAttachables([]);
+                parts[9].SetAttachables([new MagentaFragment()]);
+                parts[10].SetAttachables([new RedFragment()]);
+                parts[11].SetAttachables([new YellowFragment(), new YellowFragment()]);
+                break;
+            case Z2BossMechaPossum:
+                parts[0].SetAttachables([new YellowFragment()]);
+                parts[1].SetAttachables([new RedFragment()]);
+                parts[2].SetAttachables([new YM()]);
+                parts[3].SetAttachables([new BB()]);
+                parts[4].SetAttachables([new RG()]);
+                parts[5].SetAttachables([new BB()]);
+                parts[6].SetAttachables([new YM()]);
+                parts[7].SetAttachables([new RedFragment()]);
+                parts[8].SetAttachables([new YellowFragment()]);
+                break;
+            case LightFighterZone3:
+                parts[0].SetAttachables([new MagentaFragment()]);
+                parts[1].SetAttachables([new RR(), new RR()]);
+                parts[2].SetAttachables([new MO()]);
+                parts[3].SetAttachables([new RR(), new RR()]);
+                parts[4].SetAttachables([new MagentaFragment()]);
+                break;
+            case Shopkeep:
+                parts[0].SetAttachables([new BM(), new YY()]);
+                parts[1].SetAttachables([new BM(), new YY()]);
+                parts[2].SetAttachables([new BM(), new YY()]);
+                break;
+            case LightFighter:
+                parts[0].SetAttachables([new OrangeFragment(), new CyanFragment()]);
+                parts[1].SetAttachables([new MagentaFragment()]);
+                parts[2].SetAttachables([new RedFragment()]);
+                parts[3].SetAttachables([new BlueFragment(), new GreenFragment()]);
+                parts[4].SetAttachables([new YellowFragment()]);
+                break;
+            default: //AKA unknown/unimplemented enemy
+                List<Fragment> fragments1 = GetFragments(s, c, 4);
                 List<Item> items1 = GetItems(s, c, itemNum);
                 ThrowAttachablesOntoShip(items1, fragments1, c.otherShip, s);
                 break;
@@ -211,4 +358,6 @@ internal static partial class AttachableToPartExt
     }
     public static void SetShipAttachablesPlayerOwned(this Ship ship, bool playerOwned)
         => ship.parts.ForEach(p => p.GetAttachables().ForEach(a => a.playerOwned = playerOwned));
+    public static List<AttachableToPart> AppendRange(this List<AttachableToPart> list1, List<AttachableToPart> list2)
+        => list1.Concat(list2).ToList();
 }

@@ -17,7 +17,7 @@ public class CC : Item
         combat.QueueImmediate(new AStatus
         {
             status = ModEntry.Instance.KokoroApi.OxidationStatus.Status,
-            statusAmount = 3,
+            statusAmount = playerOwned ? 3 : 5,
             timer = 0,
             targetPlayer = !playerOwned
         });

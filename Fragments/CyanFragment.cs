@@ -13,7 +13,7 @@ public class CyanFragment : Fragment
         combat.QueueImmediate(new AStatus
         {
             status = ModEntry.Instance.KokoroApi.OxidationStatus.Status,
-            statusAmount = playerOwned ? 3 : 2,
+            statusAmount = playerOwned ? 3 : 1,
             targetPlayer = !playerOwned,
             timer = 0
         });

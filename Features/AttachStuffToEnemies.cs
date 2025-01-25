@@ -259,8 +259,8 @@ internal sealed class AttachStuffToEnemies
                 parts[2].SetAttachables([new RG()]);
                 parts[3].SetAttachables([]);
                 parts[4].SetAttachables([new RedFragment()]);
-                parts[5].SetAttachables([new RY()]);
-                parts[6].SetAttachables([new RY()]);
+                parts[5].SetAttachables([]);
+                parts[6].SetAttachables([]);
                 parts[7].SetAttachables([new RG()]);
                 parts[8].SetAttachables([]);
                 parts[9].SetAttachables([new MagentaFragment()]);
@@ -271,9 +271,9 @@ internal sealed class AttachStuffToEnemies
                 parts[0].SetAttachables([new YellowFragment()]);
                 parts[1].SetAttachables([new RedFragment()]);
                 parts[2].SetAttachables([new YM()]);
-                parts[3].SetAttachables([new BB()]);
+                parts[3].SetAttachables([]);
                 parts[4].SetAttachables([new RG()]);
-                parts[5].SetAttachables([new BB()]);
+                parts[5].SetAttachables([]);
                 parts[6].SetAttachables([new YM()]);
                 parts[7].SetAttachables([new RedFragment()]);
                 parts[8].SetAttachables([new YellowFragment()]);

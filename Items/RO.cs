@@ -24,5 +24,5 @@ public class RO : Item
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => StatusMeta.GetTooltips(Status.heat, 2);
+        => StatusMeta.GetTooltips(Status.heat, 3);
 }

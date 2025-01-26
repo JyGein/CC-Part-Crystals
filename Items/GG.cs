@@ -27,7 +27,11 @@ public class GG : Item
     public override void OnPartDetached(State state, Part part)
     {
         base.OnPartDetached(state, part);
-        if (state.ship.hullMax - 3 < state.ship.hull) storedHull = state.ship.hull - (state.ship.hullMax - 3);
+        if (state.ship.hullMax - 3 < state.ship.hull)
+        {
+            storedHull = state.ship.hull - (state.ship.hullMax - 3);
+            state.ship.hull = state.ship.hullMax - 3;
+        }
         state.ship.hullMax -= 3;
     }
 

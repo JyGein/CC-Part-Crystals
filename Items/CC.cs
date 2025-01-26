@@ -16,13 +16,13 @@ public class CC : Item
         base.OnPartHit(state, combat, part, damageDone);
         combat.QueueImmediate(new AStatus
         {
-            status = ModEntry.Instance.KokoroApi.OxidationStatus.Status,
-            statusAmount = playerOwned ? 3 : 5,
+            status = playerOwned ? Status.corrode : ModEntry.Instance.KokoroApi.OxidationStatus.Status,
+            statusAmount = playerOwned ? 1 : 5,
             timer = 0,
             targetPlayer = !playerOwned
         });
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => StatusMeta.GetTooltips(ModEntry.Instance.KokoroApi.OxidationStatus.Status, 3);
+        => [.. playerOwned ? StatusMeta.GetTooltips(Status.corrode, 1) : StatusMeta.GetTooltips(ModEntry.Instance.KokoroApi.OxidationStatus.Status, 5)];
 }

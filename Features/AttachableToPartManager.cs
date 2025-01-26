@@ -528,7 +528,9 @@ internal sealed class AttachableToPartManager
         => __instance.SetrngFragmentOfferings(new Rand(seed).Offshoot());
 
     private static void MapArtifact_MakeRoute_Postfix(State s)
-        => s.rewardsQueue.Add(new AFragmentOffering());
+    {
+        if(!s.GetCurrentQueue().Any(CA => CA is AFragmentOffering)) s.GetCurrentQueue().Queue(new AFragmentOffering());
+    }
 
     private static void AAttack_Begin_Prefix(AAttack __instance, G g, State s, Combat c)
     {

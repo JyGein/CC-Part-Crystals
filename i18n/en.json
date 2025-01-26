@@ -198,7 +198,7 @@
     },
     "CC": {
       "name": "CC",
-      "playerDesc": "The other ship gains 3 <c=status>OXIDATION</c> when this <c=part>part</c> is shot.",
+      "playerDesc": "The other ship gains 1 <c=status>CORRODE</c> when this <c=part>part</c> is shot.",
       "enemyDesc": "The other ship gains 5 <c=status>OXIDATION</c> when this <c=part>part</c> is shot."
     },
     "OO": {

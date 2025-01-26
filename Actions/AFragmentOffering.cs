@@ -16,7 +16,7 @@ public class AFragmentOffering : CardAction
         timer = 0.0;
         return new FragmentReward
         {
-            fragments = FragmentReward.GetOffering(s, amount, 2)
+            fragments = FragmentReward.GetOffering(s, amount)
         };
     }
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using PartCrystals.Fragments;
 using FMOD;
 using PartCrystals.Features;
+using Nickel;
 
 namespace PartCrystals.Routes;
 
@@ -40,24 +41,24 @@ public class FragmentReward : Route, OnMouseDown
         return true;
     }
 
-    public static List<List<Fragment>> GetOffering(State s, int amount, int amountSize, Rand? rngOverride = null)
+    public static List<List<Fragment>> GetOffering(State s, int amount, Rand? rngOverride = null)
     {
-        List<List<Type>> choices = new();
+        List<UnorderedPair<Type>> choices = new();
         foreach (Type type1 in ModEntry.Instance.fragmentTypes)
         {
             foreach (Type type2 in ModEntry.Instance.fragmentTypes)
             {
-                choices.Add([type1, type2]);
+                if (!choices.Contains(new UnorderedPair<Type>(type1, type2))) choices.Add(new UnorderedPair<Type>(type1, type2));
             }
         }
         List<List<Fragment>> list1 = [];
-        List<List<Type>> chosenFragments = choices.Shuffle(rngOverride ?? s.rngArtifactOfferings).Take(amount).ToList();
+        List<UnorderedPair<Type>> chosenFragments = choices.Shuffle(rngOverride ?? s.rngArtifactOfferings).Take(amount).ToList();
         for (int i = 0; i < amount; i++)
         {
             List<Fragment> list2 = [];
-            for (int f = 0; f < amountSize; f++)
+            for (int f = 0; f < 2; f++)
             {
-                list2.Add((Fragment)Activator.CreateInstance(chosenFragments[i][f])!);
+                list2.Add((Fragment)Activator.CreateInstance(f == 0 ? chosenFragments[i].First : chosenFragments[i].Second)!);
             }
             list1.Add(list2);
         }

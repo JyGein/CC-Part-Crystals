@@ -32,5 +32,5 @@ public class GO : Item
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => [.. StatusMeta.GetTooltips(Status.heat, 0), .. StatusMeta.GetTooltips(Status.serenity, 1)];
+        => [.. StatusMeta.GetTooltips(Status.heat, 3), .. StatusMeta.GetTooltips(Status.serenity, 1)];
 }

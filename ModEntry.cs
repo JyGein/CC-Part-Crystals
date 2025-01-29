@@ -26,11 +26,12 @@ internal class ModEntry : SimpleMod
     internal ILocalizationProvider<IReadOnlyList<string>> AnyLocalizations { get; }
     internal ILocaleBoundNonNullLocalizationProvider<IReadOnlyList<string>> Localizations { get; }
     public IStatusEntry HalfEvade;
+    public IStatusEntry QuarterEvade;
     public IStatusEntry HalfShield;
+    public IStatusEntry QuarterShield;
     public IStatusEntry HalfTempShield;
     public IStatusEntry QuarterTempShield;
     public IStatusEntry HalfDamage;
-    public IStatusEntry QuarterEvade;
     public IStatusEntry HalfHeal;
     public IStatusEntry QuarterHeal;
     public Dictionary<string, ISpriteEntry> FragmentSprites;
@@ -182,6 +183,18 @@ internal class ModEntry : SimpleMod
             },
             Name = AnyLocalizations.Bind(["status", "QuarterTempShield", "name"]).Localize,
             Description = AnyLocalizations.Bind(["status", "QuarterTempShield", "desc"]).Localize
+        });
+        QuarterShield = helper.Content.Statuses.RegisterStatus("QuarterShield", new StatusConfiguration
+        {
+            Definition = new StatusDef
+            {
+                isGood = true,
+                affectedByTimestop = false,
+                color = Colors.healthBarTempShield,
+                icon = RegisterSprite(package, "assets/icons/QuarterShield.png").Sprite
+            },
+            Name = AnyLocalizations.Bind(["status", "QuarterShield", "name"]).Localize,
+            Description = AnyLocalizations.Bind(["status", "QuarterShield", "desc"]).Localize
         });
         _ = new PartialStatusManager();
 

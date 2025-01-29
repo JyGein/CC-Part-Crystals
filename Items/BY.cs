@@ -30,14 +30,14 @@ public class BY : Item
         if (!playerOwned) return;
         combat.QueueImmediate([new AStatus
         {
-            status = ModEntry.Instance.HalfShield.Status,
+            status = ModEntry.Instance.QuarterShield.Status,
             statusAmount = 1,
             targetPlayer = playerOwned,
             timer = 0
         },
         new AStatus
         {
-            status = ModEntry.Instance.HalfEvade.Status,
+            status = ModEntry.Instance.QuarterEvade.Status,
             statusAmount = 1,
             targetPlayer = playerOwned,
             timer = 0

@@ -23,7 +23,7 @@ Orange(O)	- 3 Heat opponent when part is shot
 Items:
 /BR - Attacks from this part pierce
 /BG - When this part takes hull damage +1 max hull
-/BY - When this part shoots +1/2 shield +1/2 evade 				- gain 1/2 shield when you move
+/BY - When this part shoots +1/4 shield +1/4 evade 				- gain 1/2 shield when you move
 //BM - At start of combat gain 1 perfect shield
 /BC - Prevent 1 Hull damage a turn
 /BO - Gain 2 Serenity at start of turn

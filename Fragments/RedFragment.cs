@@ -20,7 +20,8 @@ public class RedFragment : Fragment
                 statusAmount = 1,
                 targetPlayer = false,
                 fromX = state.ship.parts.FindIndex(p => p == part),
-                fast = true
+                fast = true,
+                multiCannonVolley = true
             });
         }
         else
@@ -53,5 +54,5 @@ public class RedFragment : Fragment
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => !playerOwned ? null : StatusMeta.GetTooltips(ModEntry.Instance.HalfDamage.Status, 1);
+        => false ? null : StatusMeta.GetTooltips(ModEntry.Instance.HalfDamage.Status, 1);
 }

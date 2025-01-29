@@ -43,8 +43,10 @@ internal sealed class PartialStatusManager
     {
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterEvade.Status, ModEntry.Instance.HalfEvade.Status, true);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterTempShield.Status, ModEntry.Instance.HalfTempShield.Status, true);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterShield.Status, ModEntry.Instance.HalfShield.Status, true);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterEvade.Status, ModEntry.Instance.HalfEvade.Status, false);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterTempShield.Status, ModEntry.Instance.HalfTempShield.Status, false);
+        Partial_Status_Handler(g, __instance, ModEntry.Instance.QuarterShield.Status, ModEntry.Instance.HalfShield.Status, false);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.HalfTempShield.Status, Status.tempShield, false);
         Partial_Status_Handler(g, __instance, ModEntry.Instance.HalfShield.Status, Status.shield, false);
     }

@@ -1,7 +1,7 @@
 ﻿using Nanoray.PluginManager;
 using Nickel;
 
-namespace PartCrystals;
+namespace JyGein.PartCrystals;
 
 internal interface IRegisterable
 {

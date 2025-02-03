@@ -1,4 +1,22 @@
 ﻿{
+  "artifact": {
+    "name": "CRAFTS",
+    "description": "Allows you to craft <c=artifact>Items</c> in the PART MANAGER.",
+    "extraDescription": {
+      "zero": [
+        "You have no crafts left.",
+        "Clearing a zone grants an extra craft."
+      ],
+      "one": [
+        "You can craft <c=boldPink>1</c> more time.",
+        "Clearing a zone grants an extra craft."
+      ],
+      "other": [
+        "You can craft <c=boldPink>{{Amount}}</c> more times.",
+        "Clearing a zone grants an extra craft."
+      ]
+    }
+  },
   "status": {
     "HalfHeal": {
       "name": "Half Heal",
@@ -46,13 +64,13 @@
     },
     "YellowFragment": {
       "name": "Yellow Fragment",
-      "playerDesc": "Gain 1 <c=status>HALF EVADE</c> at the end of every turn.",
-      "enemyDesc": "This ship moves 1 space toward you when this <c=part>part</c> is shot."
+      "playerDesc": "Gain 1 <c=status>QUARTER EVADE</c> at the end of every turn.",
+      "enemyDesc": "This ship moves 1 space toward you when this <c=part>part</c> is shot once per turn."
     },
     "MagentaFragment": {
       "name": "Magenta Fragment",
-      "playerDesc": "Gain 1 <c=status>HALF TEMP SHIELD</c> at the start of every turn.",
-      "enemyDesc": "Gain 1 <c=status>HALF TEMP SHIELD</c> at the start of every turn."
+      "playerDesc": "Gain 1 <c=status>QUARTER TEMP SHIELD</c> at the start of every turn.",
+      "enemyDesc": "Gain 1 <c=status>QUARTER TEMP SHIELD</c> at the start of every turn."
     },
     "CyanFragment": {
       "name": "Cyan Fragment",
@@ -78,7 +96,7 @@
     },
     "BY": {
       "name": "BY",
-      "playerDesc": "When this <c=part>part</c> <c=action>attacks</c> gain 1 <c=status>HALF SHIELD</c> and 1 <c=status>HALF EVADE</c>.",
+      "playerDesc": "When this <c=part>part</c> <c=action>attacks</c> gain 1 <c=status>QUARTER SHIELD</c> and 1 <c=status>QUARTER EVADE</c>.",
       "enemyDesc": "Gain 1 <c=status>HALF SHIELD</c> when this ship moves."
     },
     "BM": {
@@ -128,8 +146,8 @@
     },
     "GM": {
       "name": "GM",
-      "playerDesc": "Gain 1 <c=status>QUARTER HEAL</c> and 5 <c=status>TEMP SHIELD</c> when this <c=part>part</c> is shot.",
-      "enemyDesc": "Gain 1 <c=status>QUARTER HEAL</c> and 5 <c=status>TEMP SHIELD</c> when this <c=part>part</c> is shot."
+      "playerDesc": "Gain 1 <c=status>QUARTER HEAL</c> and 3 <c=status>TEMP SHIELD</c> when this <c=part>part</c> is shot.",
+      "enemyDesc": "Gain 1 <c=status>QUARTER HEAL</c> and 3 <c=status>TEMP SHIELD</c> when this <c=part>part</c> is shot."
     },
     "CG": {
       "name": "GC",
@@ -143,7 +161,7 @@
     },
     "YM": {
       "name": "YM",
-      "playerDesc": "Gain 3 <c=status>EVADE</c> and 5 <c=status>TEMP SHIELD</c> when this <c=part>part</c> takes <c=hull>hull</c> damage.",
+      "playerDesc": "Gain 3 <c=status>EVADE</c> and 3 <c=status>TEMP SHIELD</c> when this <c=part>part</c> takes <c=hull>hull</c> damage.",
       "enemyDesc": "Gain 5 <c=status>TEMP SHIELD</c> and <c=status>ENGINE LOCK</c> you when this <c=part>part</c> takes <c=hull>hull</c> damage."
     },
     "YC": {
@@ -188,8 +206,8 @@
     },
     "YY": {
       "name": "YY",
-      "playerDesc": "Gain 1 <c=status>AUTODODGE RIGHT</c> at the start of every turn.",
-      "enemyDesc": "Gain 1 <c=status>AUTODODGE RIGHT</c> at the start of every turn."
+      "playerDesc": "When this <c=part>part</c> is shot gain 1 <c=status>AUTODODGE RIGHT</c>.",
+      "enemyDesc": "When this <c=part>part</c> is shot gain 1 <c=status>AUTODODGE RIGHT</c>."
     },
     "MM": {
       "name": "MM",
@@ -208,9 +226,13 @@
     }
   },
   "uiText": {
-    "btnPartManager": "Part\nManager",
+    "btnPartManager": "PART\nMANAGER",
+    "btnOpenCrafting": "CRAFT",
     "fragmentReward": {
-      "title": "TAKE SOME FRAGMENTS",
+      "title": {
+        "other": "TAKE SOME FRAGMENTS",
+        "one": "TAKE A FRAGMENT"
+      },
       "info": "Fragments are attached to ship parts and empower your capabilities.\nYou can have up to 4 on a part."
     },
     "codex": {
@@ -223,6 +245,11 @@
   "dialogue": {
     "FragmentSequence": "CRYSTAL FRAGMENTATION DETECTED!!! >>> PLEASE SELECT BOOT OPTION",
     "FragmentSequence_Option": "Gain <c={{firstColor}}>{{first}}</c> and <c={{secondColor}}>{{second}}</c>.",
-    "CraftanItem": "Craft an item (Free!)"
+    "CraftanItem": "Grant an extra craft"
+  },
+  "modSettings": {
+    "initialCrafts": "Initial crafts",
+    "craftsAfterZone": "Crafts after zone",
+    "shopCrafts": "Offer crafts at repair yards"
   }
 }

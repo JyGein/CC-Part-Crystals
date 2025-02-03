@@ -5,18 +5,19 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Features;
+namespace JyGein.PartCrystals.Features;
 
 public abstract class AttachableToPart
 {
     public bool playerOwned = true;
+    public int timesShotThisTurn = 0;
     public virtual int GetSize() => 0;
     public string Key() => GetType().Name;
     public virtual void OnCombatStart(State state, Combat combat, Part part) { }
-    public virtual void OnTurnStart(State state, Combat combat, Part part) { }
+    public virtual void OnTurnStart(State state, Combat combat, Part part) { timesShotThisTurn = 0; }
     public virtual void OnOtherShipTurnStart(State state, Combat combat, Part part) { }
     public virtual void OnTurnEnd(State state, Combat combat, Part part) { }
-    public virtual void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone) { }
+    public virtual void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone) { timesShotThisTurn += 1; }
     public virtual void BeforePartHit(State state, Combat combat, Part part, int incomingDamage) { }
     public virtual void OnPlayerShipShoots(State state, Combat combat, Part part) { }
     public virtual void AlterAttackFromPart(State state, Combat combat, Part part, AAttack aAttack) { }

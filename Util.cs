@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals;
+namespace JyGein.PartCrystals;
 
 public static class Util
 {

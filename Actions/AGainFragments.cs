@@ -1,13 +1,13 @@
 ﻿using FSPRO;
-using PartCrystals.Features;
-using PartCrystals.Fragments;
+using JyGein.PartCrystals.Features;
+using JyGein.PartCrystals.Fragments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Actions;
+namespace JyGein.PartCrystals.Actions;
 
 public class AGainFragments : CardAction
 {

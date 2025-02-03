@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class GreenFragment : Fragment
 {
     public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
+        base.OnPartHit(state, combat, part, damageDone);
         combat.QueueImmediate(true ?
             new AStatus
             {

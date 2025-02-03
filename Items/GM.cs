@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class GM : Item
 {
@@ -24,12 +24,12 @@ public class GM : Item
         new AStatus
         {
             status = Status.tempShield,
-            statusAmount = 5,
+            statusAmount = 3,
             timer = 0,
             targetPlayer = playerOwned
         }]);
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => [.. StatusMeta.GetTooltips(ModEntry.Instance.QuarterHeal.Status, 1), .. StatusMeta.GetTooltips(Status.tempShield, 5)];
+        => [.. StatusMeta.GetTooltips(ModEntry.Instance.QuarterHeal.Status, 1), .. StatusMeta.GetTooltips(Status.tempShield, 3)];
 }

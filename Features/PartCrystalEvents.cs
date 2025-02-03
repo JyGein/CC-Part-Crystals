@@ -1,12 +1,13 @@
-﻿using PartCrystals.Fragments;
+﻿using JyGein.PartCrystals.Fragments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PartCrystals.Actions;
+using JyGein.PartCrystals.Actions;
+using JyGein.PartCrystals.Routes;
 
-namespace PartCrystals.Features;
+namespace JyGein.PartCrystals.Features;
 
 public static class PartCrystalEvents
 {
@@ -14,25 +15,15 @@ public static class PartCrystalEvents
     {
         Rand rng = new Rand(s.rngCurrentEvent.seed + 2512983);
         string key = AttachableToPartManager.afterFragmentSequenceKey;
-        List<Choice> list = new List<Choice>();
-        List<Type> fragmentTypes = ModEntry.Instance.fragmentTypes;
-        List<List<Type>> prevOptions = [];
+        List<Choice> list = [];
+        List<List<Fragment>> fragmentList = FragmentReward.GetOffering(s, 3, 2, rng);
         for (int i = 0; i < 3; i++)
         {
-            List<Type> chosenFragments = [];
-            while (chosenFragments.Count == 0 || prevOptions.Any(l => (l[0] == chosenFragments[0] && l[1] == chosenFragments[1]) || (l[0] == chosenFragments[1] && l[1] == chosenFragments[0])))
-            {
-                chosenFragments = [
-                fragmentTypes.Shuffle(rng).First(),
-                fragmentTypes.Shuffle(rng).First()
-                ];
-            };
-            prevOptions.Add(chosenFragments);
             list.Add(new Choice
             {
-                label = ModEntry.Instance.Localizations.Localize(["dialogue", "FragmentSequence_Option"], new { first = chosenFragments[0].Name.Remove(chosenFragments[0].Name.Length-8), second = chosenFragments[1].Name.Remove(chosenFragments[1].Name.Length - 8), firstColor = Fragment.FragmentColors[chosenFragments[0]], secondColor = Fragment.FragmentColors[chosenFragments[1]], }),
+                label = ModEntry.Instance.Localizations.Localize(["dialogue", "FragmentSequence_Option"], new { first = fragmentList[i][0].Name().Remove(fragmentList[i][0].Name().Length-9), second = fragmentList[i][1].Name().Remove(fragmentList[i][1].Name().Length - 9), firstColor = Fragment.FragmentColors[fragmentList[i][0].GetType()], secondColor = Fragment.FragmentColors[fragmentList[i][1].GetType()], }),
                 key = key,
-                actions = [new AGainFragments(chosenFragments), new AAttachSequence()]
+                actions = [new AGainFragments(fragmentList[i].Cast<AttachableToPart>().ToList()), new AAttachSequence()]
             });
         }
         return list;

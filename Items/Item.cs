@@ -6,15 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using PartCrystals.Actions;
-//using PartCrystals.Cards;
-using PartCrystals.External;
-using PartCrystals.dumb_stupid_idiot_strings;
+using JyGein.PartCrystals.Actions;
+//using JyGein.PartCrystals.Cards;
+using JyGein.PartCrystals.External;
+using JyGein.PartCrystals.dumb_stupid_idiot_strings;
 using System.Reflection;
-using PartCrystals.Features;
+using JyGein.PartCrystals.Features;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class Item : AttachableToPart
 {
@@ -83,20 +83,20 @@ public class Item : AttachableToPart
         }
         g.Pop();
     }
-    public override void OnCombatStart(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnCombatStart(state, combat, part)); }
-    public override void OnTurnStart(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnTurnStart(state, combat, part)); }
-    public override void OnOtherShipTurnStart(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnOtherShipTurnStart(state, combat, part)); }
-    public override void OnTurnEnd(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnTurnEnd(state, combat, part)); }
-    public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartHit(state, combat, part, damageDone)); }
-    public override void BeforePartHit(State state, Combat combat, Part part, int incomingDamage) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).BeforePartHit(state, combat, part, incomingDamage)); }
-    public override void OnPlayerShipShoots(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPlayerShipShoots(state, combat, part)); }
-    public override void AlterAttackFromPart(State state, Combat combat, Part part, AAttack aAttack) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).AlterAttackFromPart(state, combat, part, aAttack)); }
-    public override void AlterHullDamage(State state, Combat combat, Ship ship, ref int amt) { foreach (Type t in GetBaseFragmentTypes()) ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).AlterHullDamage(state, combat, ship, ref amt); }
-    public override void OnPartAttacks(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartAttacks(state, combat, part)); }
-    public override void OnShipMoves(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnShipMoves(state, combat, part)); }
-    public override void OnOtherShipMoves(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnOtherShipMoves(state, combat, part)); }
-    public override void OnShipOverheats(State state, Combat combat, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnShipOverheats(state, combat, part)); }
-    public override void OnPartDamages(State state, Combat combat, Part part, DamageDone damageDone, Ship ship) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartDamages(state, combat, part, damageDone, ship)); }
-    public override void OnPartAttached(State state, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartAttached(state, part)); }
-    public override void OnPartDetached(State state, Part part) { GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartDetached(state, part)); }
+    public override void OnCombatStart(State state, Combat combat, Part part) { base.OnCombatStart(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnCombatStart(state, combat, part)); }
+    public override void OnTurnStart(State state, Combat combat, Part part) { base.OnTurnStart(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnTurnStart(state, combat, part)); }
+    public override void OnOtherShipTurnStart(State state, Combat combat, Part part) { base.OnOtherShipTurnStart(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnOtherShipTurnStart(state, combat, part)); }
+    public override void OnTurnEnd(State state, Combat combat, Part part) { base.OnTurnEnd(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnTurnEnd(state, combat, part)); }
+    public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone) { base.OnPartHit(state, combat, part, damageDone); foreach (Type t in GetBaseFragmentTypes()) { Fragment f = ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned); f.timesShotThisTurn = timesShotThisTurn - 1; f.OnPartHit(state, combat, part, damageDone); } }
+    public override void BeforePartHit(State state, Combat combat, Part part, int incomingDamage) { base.BeforePartHit(state, combat, part, incomingDamage); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).BeforePartHit(state, combat, part, incomingDamage)); }
+    public override void OnPlayerShipShoots(State state, Combat combat, Part part) { base.OnPlayerShipShoots(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPlayerShipShoots(state, combat, part)); }
+    public override void AlterAttackFromPart(State state, Combat combat, Part part, AAttack aAttack) { base.AlterAttackFromPart(state, combat, part, aAttack); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).AlterAttackFromPart(state, combat, part, aAttack)); }
+    public override void AlterHullDamage(State state, Combat combat, Ship ship, ref int amt) { base.AlterHullDamage(state, combat, ship, ref amt); foreach (Type t in GetBaseFragmentTypes()) ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).AlterHullDamage(state, combat, ship, ref amt); }
+    public override void OnPartAttacks(State state, Combat combat, Part part) { base.OnPartAttacks(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartAttacks(state, combat, part)); }
+    public override void OnShipMoves(State state, Combat combat, Part part) { base.OnShipMoves(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnShipMoves(state, combat, part)); }
+    public override void OnOtherShipMoves(State state, Combat combat, Part part) { base.OnOtherShipMoves(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnOtherShipMoves(state, combat, part)); }
+    public override void OnShipOverheats(State state, Combat combat, Part part) { base.OnShipOverheats(state, combat, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnShipOverheats(state, combat, part)); }
+    public override void OnPartDamages(State state, Combat combat, Part part, DamageDone damageDone, Ship ship) { base.OnPartDamages(state, combat, part, damageDone, ship); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartDamages(state, combat, part, damageDone, ship)); }
+    public override void OnPartAttached(State state, Part part) { base.OnPartAttached(state, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartAttached(state, part)); }
+    public override void OnPartDetached(State state, Part part) { base.OnPartDetached(state, part); GetBaseFragmentTypes().ForEach(t => ((Fragment)AccessTools.CreateInstance(t)).ChangedPlayerOwned(playerOwned).OnPartDetached(state, part)); }
 }

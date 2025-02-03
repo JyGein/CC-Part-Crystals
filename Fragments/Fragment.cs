@@ -6,15 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-//using PartCrystals.Actions;
-//using PartCrystals.Cards;
-using PartCrystals.External;
-using PartCrystals.dumb_stupid_idiot_strings;
+//using JyGein.PartCrystals.Actions;
+//using JyGein.PartCrystals.Cards;
+using JyGein.PartCrystals.External;
+using JyGein.PartCrystals.dumb_stupid_idiot_strings;
 using System.Reflection;
-using PartCrystals.Features;
+using JyGein.PartCrystals.Features;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class Fragment : AttachableToPart
 {

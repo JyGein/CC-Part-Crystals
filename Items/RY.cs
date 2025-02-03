@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class RY : Item
 {

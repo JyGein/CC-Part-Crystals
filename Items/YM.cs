@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class YM : Item
 {
@@ -26,7 +26,7 @@ public class YM : Item
             new AStatus
             {
                 status = Status.tempShield,
-                statusAmount = 5,
+                statusAmount = 3,
                 timer = 0,
                 targetPlayer = playerOwned
             }]);
@@ -34,5 +34,5 @@ public class YM : Item
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => [.. playerOwned ? StatusMeta.GetTooltips(Status.evade, 3) : StatusMeta.GetTooltips(Status.lockdown, 1), .. StatusMeta.GetTooltips(Status.tempShield, 5)];
+        => [.. playerOwned ? StatusMeta.GetTooltips(Status.evade, 3) : StatusMeta.GetTooltips(Status.lockdown, 1), .. StatusMeta.GetTooltips(Status.tempShield, 3)];
 }

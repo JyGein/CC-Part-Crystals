@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.External;
+namespace JyGein.PartCrystals.External;
 
 /// <summary>
 /// Allows accessing all of Kokoro library APIs.

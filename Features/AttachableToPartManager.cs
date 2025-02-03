@@ -5,26 +5,28 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using PartCrystals.dumb_stupid_idiot_strings;
+using JyGein.PartCrystals.dumb_stupid_idiot_strings;
 using Nanoray.Shrike.Harmony;
 using Nanoray.Shrike;
 using System.Reflection.Emit;
 using Nickel;
 using Microsoft.Extensions.Logging;
-using PartCrystals.Fragments;
+using JyGein.PartCrystals.Fragments;
 using Microsoft.Xna.Framework;
 using System.Drawing;
-using PartCrystals.Actions;
+using JyGein.PartCrystals.Actions;
 using System.Xml.Serialization;
 using FSPRO;
-using PartCrystals.Routes;
+using JyGein.PartCrystals.Routes;
+using JyGein.PartCrystals.Artifacts;
 
-namespace PartCrystals.Features;
+namespace JyGein.PartCrystals.Features;
 
 internal sealed class AttachableToPartManager
 {
     public static UK OpenShipManagerButton = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
     public static UK CodexItems = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
+    public static UK OpenCrafting = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
     public static string afterFragmentSequenceKey = ".zone_first";
     public AttachableToPartManager()
     {
@@ -55,10 +57,6 @@ internal sealed class AttachableToPartManager
         ModEntry.Instance.Harmony.Patch(
             original: AccessTools.DeclaredMethod(typeof(Events), nameof(Events.BootSequence)),
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Events_BootSequence_Postfix))
-        );
-        ModEntry.Instance.Harmony.Patch(
-            original: AccessTools.DeclaredMethod(typeof(Events), nameof(Events.NewShop)),
-            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(Events_NewShop_Postfix))
         );
         ModEntry.Instance.Harmony.Patch(
             original: AccessTools.DeclaredMethod(typeof(DB), nameof(DB.SetLocale)),
@@ -130,10 +128,6 @@ internal sealed class AttachableToPartManager
         ModEntry.Instance.Harmony.Patch(
             original: AccessTools.DeclaredMethod(typeof(AAttack), nameof(AAttack.Begin)),
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AAttack_Begin_Postfix))
-        );
-        ModEntry.Instance.Harmony.Patch(
-            original: AccessTools.DeclaredMethod(typeof(State), nameof(State.SeedRand)),
-            postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(State_SeedRand_Postfix))
         );
         ModEntry.Instance.Harmony.Patch(
             original: AccessTools.DeclaredMethod(typeof(MapArtifact), nameof(MapArtifact.MakeRoute)),
@@ -323,6 +317,7 @@ internal sealed class AttachableToPartManager
             Color? color = attachable == __instance.GetHeldAttachable() ? Colors.smoke[0] : null;
             attachable.Render(g, vec, onMouseDown:__instance, color: color);
         }
+        SharedArt.ButtonText(g, new Vec(210.0, 235.0), OpenCrafting, ModEntry.Instance.Localizations.Localize(["uiText", "btnOpenCrafting"]), null, null, inactive: false, __instance, null, null, null, null, autoFocus: true);
     }
 
     private static void ShipUpgrades_OnMouseDown_Postfix(ShipUpgrades __instance, G g, Box b)
@@ -419,24 +414,19 @@ internal sealed class AttachableToPartManager
         }
     }
 
-    private static void Events_NewShop_Postfix(State s, ref List<Choice> __result)
-    {
-        if (s.GetPlayerAttachables().Count(a => a is Fragment) + s.ship.parts.SelectMany(p => p.GetAttachables()).Count(a => a is Fragment) < 2 || s.route.GetHasCraftedHere()) return;
-        __result.Insert(__result.Count-2, new Choice
-        {
-            label = ModEntry.Instance.Localizations.Localize(["dialogue", "CraftanItem"]),
-            key = "NewShop",
-            actions = { new AItemCrafting() }
-        });
-    }
-
     private static void DB_SetLocale_Postfix(string locale, bool useHiRes)
     {
         DB.currentLocale.strings.TryAdd($"FragmentSequence{ModEntry.Instance.Package.Manifest.UniqueName}:beb77013", ModEntry.Instance.Localizations.Localize(["dialogue", "FragmentSequence"]));
     }
 
     private static void State_PopulateRun_Postfix(State __instance)
-        => __instance.SetPlayerAttachables([]);
+    {
+        __instance.SetPlayerAttachables([]);
+
+        if (!DB.artifactMetas.ContainsKey(new CraftArtifact().Key()))
+            return; // game not yet ready - probably non-debug warmup
+        __instance.SendArtifactToChar(new CraftArtifact());
+    }
 
     private static void Combat_PlayerWon_Postfix(Combat __instance, G g)
     {
@@ -446,7 +436,7 @@ internal sealed class AttachableToPartManager
             bool flag = mapBattle.battleType == BattleType.Boss && s.map.IsFinalZone();
             if (!__instance.noReward)
             {
-                if (mapBattle.battleType == BattleType.Elite || mapBattle.battleType == BattleType.Boss)
+                if (/*mapBattle.battleType == BattleType.Elite || */mapBattle.battleType == BattleType.Boss)
                 {
                     s.rewardsQueue.Queue(new AFragmentOffering());
                 }
@@ -524,12 +514,9 @@ internal sealed class AttachableToPartManager
         }
     }
 
-    private static void State_SeedRand_Postfix(State __instance, uint seed)
-        => __instance.SetrngFragmentOfferings(new Rand(seed).Offshoot());
-
     private static void MapArtifact_MakeRoute_Postfix(State s)
     {
-        if(!s.GetCurrentQueue().Any(CA => CA is AFragmentOffering)) s.GetCurrentQueue().Queue(new AFragmentOffering());
+        if(!s.GetCurrentQueue().Any(CA => CA is AFragmentOffering)) s.GetCurrentQueue().Queue(new AFragmentOffering { amountSize = 1 });
     }
 
     private static void AAttack_Begin_Prefix(AAttack __instance, G g, State s, Combat c)
@@ -583,10 +570,6 @@ internal static partial class AttachableToPartExt
         => ModEntry.Instance.Helper.ModData.GetOptionalModData<AttachableToPart>(state, DSIS.ATPMDS);
     public static void SetHeldAttachable(this ShipUpgrades state, AttachableToPart? attachable)
         => ModEntry.Instance.Helper.ModData.SetOptionalModData<AttachableToPart>(state, DSIS.ATPMDS, attachable);
-    public static Rand GetrngFragmentOfferings(this State state)
-        => ModEntry.Instance.Helper.ModData.GetOptionalModData<Rand>(state, DSIS.rngFragmentOfferings) ?? new();
-    public static void SetrngFragmentOfferings(this State state, Rand rand)
-        => ModEntry.Instance.Helper.ModData.SetOptionalModData<Rand>(state, DSIS.rngFragmentOfferings, rand);
     public static int Size(this List<AttachableToPart> attachables)
     {
         int num = 0;

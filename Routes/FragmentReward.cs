@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PartCrystals.Fragments;
+using JyGein.PartCrystals.Fragments;
 using FMOD;
-using PartCrystals.Features;
+using JyGein.PartCrystals.Features;
 using Nickel;
 
-namespace PartCrystals.Routes;
+namespace JyGein.PartCrystals.Routes;
 
 public class FragmentReward : Route, OnMouseDown
 {
@@ -41,24 +41,29 @@ public class FragmentReward : Route, OnMouseDown
         return true;
     }
 
-    public static List<List<Fragment>> GetOffering(State s, int amount, Rand? rngOverride = null)
+    public static List<List<Fragment>> GetOffering(State s, int amount, int amountSize, Rand? rngOverride = null)
     {
-        List<UnorderedPair<Type>> choices = new();
-        foreach (Type type1 in ModEntry.Instance.fragmentTypes)
+        List<UnorderedList<Type>> chosenFragments = []; //choices.Shuffle(rngOverride ?? s.rngArtifactOfferings).Take(amount).ToList();
+        for (int i = 0; i < amount; i++)
         {
-            foreach (Type type2 in ModEntry.Instance.fragmentTypes)
+            UnorderedList<Type> thisOne = new([]);
+            int failSafe = 0;
+            while ((thisOne.List.Count == 0 || chosenFragments.Any(uList => uList == thisOne)) && failSafe < 100)
             {
-                if (!choices.Contains(new UnorderedPair<Type>(type1, type2))) choices.Add(new UnorderedPair<Type>(type1, type2));
-            }
+                List<Type> types = [];
+                for (int f = 0; f < amountSize; f++) types.Add(ModEntry.Instance.fragmentTypes.Shuffle(rngOverride ?? s.rngArtifactOfferings).First());
+                thisOne = new(types);
+                failSafe++;
+            };
+            chosenFragments.Add(thisOne);
         }
         List<List<Fragment>> list1 = [];
-        List<UnorderedPair<Type>> chosenFragments = choices.Shuffle(rngOverride ?? s.rngArtifactOfferings).Take(amount).ToList();
         for (int i = 0; i < amount; i++)
         {
             List<Fragment> list2 = [];
-            for (int f = 0; f < 2; f++)
+            for (int f = 0; f < amountSize; f++)
             {
-                list2.Add((Fragment)Activator.CreateInstance(f == 0 ? chosenFragments[i].First : chosenFragments[i].Second)!);
+                list2.Add((Fragment)Activator.CreateInstance(chosenFragments[i].List[f])!);
             }
             list1.Add(list2);
         }
@@ -75,7 +80,8 @@ public class FragmentReward : Route, OnMouseDown
         int num = 180;
         int num2 = 29;
         SharedArt.DrawEngineering(g);
-        string str = ModEntry.Instance.Localizations.Localize(["uiText", "fragmentReward", "title"]);
+        bool flag = fragments.All(list => list.Count == 1);
+        string str = ModEntry.Instance.Localizations.Localize(["uiText", "fragmentReward", "title", flag ? "one" : "other"]);
         Font stapler = DB.stapler;
         Color? color = Colors.textMain;
         TAlign? align = TAlign.Center;
@@ -97,7 +103,7 @@ public class FragmentReward : Route, OnMouseDown
         particles.Render(g.dt);
         for (int i = 0; i < fragments.Count; i++)
         {
-            List<Fragment> fragmentPair = fragments[i];
+            List<Fragment> fragmentList = fragments[i];
             UIKey? key2 = new UIKey(FragmentReward_FragmentUK, i);
             Rect? rect = new Rect(240 - (int)(num / 2.0), 144.0 + Math.Floor((i - fragments.Count / 2.0) * (num2 - 2)), num, num2);
             OnMouseDown onMouseDown = this;
@@ -110,13 +116,13 @@ public class FragmentReward : Route, OnMouseDown
             Draw.Sprite(id2, x2, y2, flipX: false, flipY: false, 0.0, null, null, null, null, null);
             if (box.IsHover())
             {
-                g.tooltips.Add(xy + new Vec(num + 3, 2.0), fragmentPair.SelectMany(f => f.GetTooltips()).Skip(1));
+                g.tooltips.Add(xy + new Vec(num + 3, 2.0), fragmentList.SelectMany(f => f.GetTooltips()).Skip(1));
             }
             Vec vec = xy + new Vec(0.0, box.IsHover() ? 1 : 0);
             Vec vec2 = vec + new Vec(14.0, 14.0);
-            Vec vec3 = vec2;
-            fragmentPair.WithIndex().ForEach((f) => Draw.Sprite(f.Item1.GetSprite(), (int)(vec3.x - 7.0) + 8 * f.Item2, (int)(vec3.y - 7.0) + 6 * f.Item2));
-            string locName = string.Join(" and ", fragmentPair.Select(f => $"<c={Fragment.FragmentColors[f.GetType()]}>{f.Name().Remove(f.Name().Length - 9)}</c>"));
+            if (fragmentList.Count == 1) Draw.Sprite(fragmentList[0].GetSprite(), (int)(vec2.x - 3.0), (int)(vec2.y - 4.0));
+            else fragmentList.WithIndex().ForEach((f) => Draw.Sprite(f.Item1.GetSprite(), (int)(vec2.x - 7.0) + ((13 - 5) / (fragmentList.Count - 1) * f.Item2), (int)(vec2.y - 7.0) + ((13 - 7) / (fragmentList.Count - 1) * f.Item2)));
+            string locName = string.Join(" and ", fragmentList.Select(f => $"<c={Fragment.FragmentColors[f.GetType()]}>{f.Name().Remove(f.Name().Length - 9)}</c>"));
             double x3 = vec.x + 32.0;
             double y3 = vec.y + 11.0;
             boxColor = Colors.black;

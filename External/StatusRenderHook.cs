@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PartCrystals.External;
+namespace JyGein.PartCrystals.External;
 
 public partial interface IKokoroApi
 {

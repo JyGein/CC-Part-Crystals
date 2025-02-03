@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.dumb_stupid_idiot_strings;
+namespace JyGein.PartCrystals.dumb_stupid_idiot_strings;
 
 public static class DSIS
 {

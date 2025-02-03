@@ -1,6 +1,6 @@
 ﻿using Nanoray.EnumByNameSourceGenerator;
 
-namespace PartCrystals;
+namespace JyGein.PartCrystals;
 
 /*
  * Enumeration (enum) types in C# are internally stored as numbers.

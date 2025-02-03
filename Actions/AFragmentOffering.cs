@@ -1,22 +1,23 @@
 ﻿using FSPRO;
-using PartCrystals.Routes;
+using JyGein.PartCrystals.Routes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Actions;
+namespace JyGein.PartCrystals.Actions;
 
 public class AFragmentOffering : CardAction
 {
     public int amount = 3;
+    public int amountSize = 2;
     public override Route? BeginWithRoute(G g, State s, Combat c)
     {
         timer = 0.0;
         return new FragmentReward
         {
-            fragments = FragmentReward.GetOffering(s, amount)
+            fragments = FragmentReward.GetOffering(s, amount, amountSize)
         };
     }
 

@@ -1,12 +1,12 @@
 ﻿using FSPRO;
-using PartCrystals.Features;
+using JyGein.PartCrystals.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Actions;
+namespace JyGein.PartCrystals.Actions;
 
 public class AItemCrafting : CardAction
 {

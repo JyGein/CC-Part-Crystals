@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class BY : Item
 {
@@ -45,5 +45,5 @@ public class BY : Item
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => playerOwned ? [.. StatusMeta.GetTooltips(ModEntry.Instance.HalfShield.Status, 1), .. StatusMeta.GetTooltips(ModEntry.Instance.HalfEvade.Status, 1)] : StatusMeta.GetTooltips(ModEntry.Instance.HalfShield.Status, 1);
+        => playerOwned ? [.. StatusMeta.GetTooltips(ModEntry.Instance.QuarterShield.Status, 1), .. StatusMeta.GetTooltips(ModEntry.Instance.QuarterEvade.Status, 1)] : StatusMeta.GetTooltips(ModEntry.Instance.HalfShield.Status, 1);
 }

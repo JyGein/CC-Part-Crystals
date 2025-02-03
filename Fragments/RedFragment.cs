@@ -5,12 +5,13 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class RedFragment : Fragment
 {
     public override void OnTurnEnd(State state, Combat combat, Part part)
     {
+        base.OnTurnEnd(state, combat, part);
         if (playerOwned)
         {
             combat.Queue(new AAttack
@@ -39,6 +40,7 @@ public class RedFragment : Fragment
     }
     public override void OnPlayerShipShoots(State state, Combat combat, Part part)
     {
+        base.OnPlayerShipShoots(state, combat, part);
         return;
 #pragma warning disable CS0162 // Unreachable code detected
         combat.QueueImmediate(new AAttack

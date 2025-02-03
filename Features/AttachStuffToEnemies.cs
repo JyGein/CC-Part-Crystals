@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Nickel;
-using PartCrystals.dumb_stupid_idiot_strings;
-using PartCrystals.Fragments;
+using JyGein.PartCrystals.dumb_stupid_idiot_strings;
+using JyGein.PartCrystals.Fragments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Features;
+namespace JyGein.PartCrystals.Features;
 
 internal sealed class AttachStuffToEnemies
 {
@@ -56,9 +56,9 @@ internal sealed class AttachStuffToEnemies
                 parts[2].SetAttachables([new YellowFragment(), new YellowFragment(), new YellowFragment(), new YellowFragment()]);
                 break;
             case Wizard:
-                parts[0].SetAttachables([new OrangeFragment()]);
-                parts[2].SetAttachables([new OrangeFragment(), new OrangeFragment()]);
-                parts[3].SetAttachables([new OrangeFragment(), new RedFragment()]);
+                parts[0].SetAttachables([]);
+                parts[2].SetAttachables([new OrangeFragment()]);
+                parts[3].SetAttachables([new RedFragment()]);
                 parts[4].SetAttachables([new CO()]);
                 break;
             case MediumFighter:
@@ -117,10 +117,10 @@ internal sealed class AttachStuffToEnemies
                 parts[8].SetAttachables([]);
                 break;
             case DrakePirate:
-                parts[0].SetAttachables([new RO()]);
+                parts[0].SetAttachables([new RedFragment()]);
                 parts[1].SetAttachables([]);
                 parts[2].SetAttachables([new RO()]);
-                parts[3].SetAttachables([new RO()]);
+                parts[3].SetAttachables([new OrangeFragment()]);
                 break;
             case PaybackBruiserZ1:
                 parts[0].SetAttachables([new BlueFragment()]);

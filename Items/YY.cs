@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class YY : Item
 {
     public override List<Type> GetBaseFragmentTypes()
         => [typeof(YellowFragment), typeof(YellowFragment)];
 
-    public override void OnTurnStart(State state, Combat combat, Part part)
+    public override void OnPartHit(State state, Combat combat, Part part, DamageDone damageDone)
     {
-        base.OnTurnStart(state, combat, part);
-        combat.Queue(new AStatus
+        base.OnPartHit(state, combat, part, damageDone);
+        combat.QueueImmediate(new AStatus
         {
             status = Status.autododgeRight,
             statusAmount = 1,

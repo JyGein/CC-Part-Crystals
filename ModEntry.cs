@@ -6,22 +6,26 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-//using PartCrystals.Actions;
-//using PartCrystals.Cards;
-using PartCrystals.External;
-using PartCrystals.dumb_stupid_idiot_strings;
+//using JyGein.PartCrystals.Actions;
+//using JyGein.PartCrystals.Cards;
+using JyGein.PartCrystals.External;
+using JyGein.PartCrystals.dumb_stupid_idiot_strings;
 using System.Reflection;
-using PartCrystals.Features;
-using PartCrystals.Fragments;
+using JyGein.PartCrystals.Features;
+using JyGein.PartCrystals.Fragments;
 using System.Runtime.CompilerServices;
+using JyGein.PartCrystals.Artifacts;
 
-namespace PartCrystals;
+namespace JyGein.PartCrystals;
 
 internal class ModEntry : SimpleMod
 {
     internal static ModEntry Instance { get; private set; } = null!;
     internal Harmony Harmony;
     internal IKokoroApi.IV2 KokoroApi;
+    internal readonly Settings Settings;
+    private IWritableFileInfo SettingsFile
+        => this.Helper.Storage.GetMainStorageFile("json");
     //internal IDeckEntry DemoDeck;
     internal ILocalizationProvider<IReadOnlyList<string>> AnyLocalizations { get; }
     internal ILocaleBoundNonNullLocalizationProvider<IReadOnlyList<string>> Localizations { get; }
@@ -60,7 +64,7 @@ internal class ModEntry : SimpleMod
     {
         Instance = this;
         Harmony = new Harmony("JyGein.PartCrystals");
-
+        
         /*
          * Some mods provide an API, which can be requested from the ModRegistry.
          * The following is an example of a required dependency - the code would have unexpected errors if Kokoro was not present.
@@ -75,6 +79,21 @@ internal class ModEntry : SimpleMod
         Localizations = new MissingPlaceholderLocalizationProvider<IReadOnlyList<string>>(
             new CurrentLocaleOrEnglishLocalizationProvider<IReadOnlyList<string>>(AnyLocalizations)
         );
+        this.Settings = helper.Storage.LoadJson<Settings>(this.SettingsFile);
+
+        helper.Content.Artifacts.RegisterArtifact("Crafts", new()
+        {
+            ArtifactType = typeof(CraftArtifact),
+            Meta = new()
+            {
+                owner = Deck.colorless,
+                unremovable = true,
+                pools = [ArtifactPool.Common]
+            },
+            Sprite = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("assets/artifacts/CraftArtifact.png")).Sprite,
+            Name = AnyLocalizations.Bind(["artifact", "name"]).Localize,
+            Description = AnyLocalizations.Bind(["artifact", "description"]).Localize
+        });
 
         /*
          * A deck only defines how cards should be grouped, for things such as codex sorting and Second Opinions.
@@ -89,15 +108,15 @@ internal class ModEntry : SimpleMod
                  * TODO On cards, it dictates the sheen on higher rarities, as well as influences the color of the energy cost.
                  * If this deck is given to a playable character, their name will be this color, and their mini will have this color as their border.
                  */
-                /*color = new Color("999999"),
+        /*color = new Color("999999"),
 
-                titleColor = new Color("000000")
-            },
+        titleColor = new Color("000000")
+    },
 
-            DefaultCardArt = StableSpr.cards_colorless,
-            BorderSprite = RegisterSprite(package, "assets/frame_dave.png").Sprite,
-            Name = AnyLocalizations.Bind(["character", "name"]).Localize
-        });*/
+    DefaultCardArt = StableSpr.cards_colorless,
+    BorderSprite = RegisterSprite(package, "assets/frame_dave.png").Sprite,
+    Name = AnyLocalizations.Bind(["character", "name"]).Localize
+});*/
 
         /*
          * All the IRegisterable types placed into the static lists at the start of the class are initialized here.
@@ -209,6 +228,36 @@ internal class ModEntry : SimpleMod
         HalfDamage = helper.Content.Statuses.LookupByUniqueName($"{randallUniqueName}::{DSIS.HalfDamageUniqueName}")!;
 
         _ = new AttachableToPartManager();
+        _ = new CraftsChargeManager();
+        helper.ModRegistry.AwaitApi<IModSettingsApi>(
+            "Nickel.ModSettings",
+            api => api.RegisterModSettings(api.MakeList([
+                api.MakeProfileSelector(
+                    () => package.Manifest.DisplayName ?? package.Manifest.UniqueName,
+                    Settings.ProfileBased
+                ),
+                api.MakeNumericStepper(
+                    () => Localizations.Localize(["modSettings", "initialCrafts"]),
+                    () => Settings.ProfileBased.Current.InitialCrafts,
+                    value => Settings.ProfileBased.Current.InitialCrafts = value,
+                    minValue: 0
+                ),
+                api.MakeNumericStepper(
+                    () => Localizations.Localize(["modSettings", "craftsAfterZone"]),
+                    () => Settings.ProfileBased.Current.CraftsAfterZone,
+                    value => Settings.ProfileBased.Current.CraftsAfterZone = value,
+                    minValue: 0
+                ),
+                api.MakeCheckbox(
+                    () => Localizations.Localize(["modSettings", "shopCrafts"]),
+                    () => Settings.ProfileBased.Current.ShopCrafts,
+                    (_, _, value) => Settings.ProfileBased.Current.ShopCrafts = value
+                )
+            ]).SubscribeToOnMenuClose(_ =>
+            {
+                helper.Storage.SaveJson(this.SettingsFile, this.Settings);
+            }))
+        );
     }
 
     /*

@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartCrystals.Fragments;
+namespace JyGein.PartCrystals.Fragments;
 
 public class MagentaFragment : Fragment
 {
     public override void OnTurnStart(State state, Combat combat, Part part)
     {
+        base.OnTurnStart(state, combat, part);
         combat.Queue(new AStatus
         {
-            status = ModEntry.Instance.HalfTempShield.Status,
+            status = ModEntry.Instance.QuarterTempShield.Status,
             statusAmount = 1,
             targetPlayer = playerOwned,
             timer = 0
@@ -20,5 +21,5 @@ public class MagentaFragment : Fragment
     }
 
     public override List<Tooltip>? GetExtraTooltips()
-        => StatusMeta.GetTooltips(ModEntry.Instance.HalfTempShield.Status, 1);
+        => StatusMeta.GetTooltips(ModEntry.Instance.QuarterTempShield.Status, 1);
 }

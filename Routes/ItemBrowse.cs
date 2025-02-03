@@ -6,11 +6,11 @@ using daisyowl.text;
 using FSPRO;
 using Microsoft.Xna.Framework.Input;
 using System.Threading.Tasks;
-using PartCrystals;
-using PartCrystals.Fragments;
-using PartCrystals.Features;
+using JyGein.PartCrystals;
+using JyGein.PartCrystals.Fragments;
+using JyGein.PartCrystals.Features;
 
-namespace PartCrystals.Routes;
+namespace JyGein.PartCrystals.Routes;
 
 public class ItemBrowse : Route, OnInputPhase, OnMouseDown
 {

@@ -27,7 +27,6 @@ public class YellowFragment : Fragment
         base.OnPartHit(state, combat, part, damageDone);
         if (playerOwned) return;
         if (timesShotThisTurn > 1) return;
-        ModEntry.Instance.Logger.LogInformation("hi moving");
         float otherShipPos = combat.otherShip.x + (combat.otherShip.parts.Count / 2f);
         float shipPos = state.ship.x + (state.ship.parts.Count / 2f);
         combat.QueueImmediate(new AMove
@@ -40,7 +39,6 @@ public class YellowFragment : Fragment
     public override void OnTurnStart(State state, Combat combat, Part part)
     {
         base.OnTurnStart(state, combat, part);
-        ModEntry.Instance.Logger.LogInformation("hi reset");
     }
 
     public override List<Tooltip>? GetExtraTooltips()

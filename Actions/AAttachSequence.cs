@@ -15,6 +15,7 @@ public class AAttachSequence : CardAction
         timer = 0.0;
         ShipUpgrades route = new();
         route.SetIsSpecialAttachSequence(true);
+        route.outroTimer = 0.75;
         return route;
     }
 

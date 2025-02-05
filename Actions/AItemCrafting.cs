@@ -15,6 +15,7 @@ public class AItemCrafting : CardAction
         timer = 0.0;
         ShipUpgrades route = new();
         route.SetIsActuallyCrafting(true);
+        route.outroTimer = 0.75;
         return route;
     }
 

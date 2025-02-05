@@ -183,20 +183,20 @@ internal sealed class AttachableToPartManager
 
     private static void G_Render_Postfix(G __instance)
     {
-        //if (__instance.metaRoute != null)
-        //{
-        //    ModEntry.Instance.Logger.LogInformation(__instance.metaRoute.GetType().Name);
-        //    if (__instance.metaRoute.subRoute != null)
-        //    {
-        //        ModEntry.Instance.Logger.LogInformation(__instance.metaRoute.subRoute.GetType().Name);
-        //        if (__instance.metaRoute.subRoute is Codex codex && codex.subRoute != null)
-        //        {
-        //            ModEntry.Instance.Logger.LogInformation(codex.subRoute.GetType().Name);
-        //        }
-        //    }
-        //}
-        //ModEntry.Instance.Logger.LogInformation(__instance.state.route.GetType().Name);
-        //if (__instance.state.routeOverride != null) ModEntry.Instance.Logger.LogInformation(__instance.state.routeOverride.GetType().Name);
+        /*if (__instance.metaRoute != null)
+        {
+            ModEntry.Instance.Logger.LogInformation(__instance.metaRoute.GetType().Name);
+            if (__instance.metaRoute.subRoute != null)
+            {
+                ModEntry.Instance.Logger.LogInformation(__instance.metaRoute.subRoute.GetType().Name);
+                if (__instance.metaRoute.subRoute is Codex codex && codex.subRoute != null)
+                {
+                    ModEntry.Instance.Logger.LogInformation(codex.subRoute.GetType().Name);
+                }
+            }
+        }
+        ModEntry.Instance.Logger.LogInformation(__instance.state.route.GetType().Name);
+        if (__instance.state.routeOverride != null) ModEntry.Instance.Logger.LogInformation(__instance.state.routeOverride.GetType().Name);*/
     }
 
     private static void Codex_Render_Postfix(Codex __instance, G g)
@@ -317,13 +317,17 @@ internal sealed class AttachableToPartManager
             Color? color = attachable == __instance.GetHeldAttachable() ? Colors.smoke[0] : null;
             attachable.Render(g, vec, onMouseDown:__instance, color: color);
         }
-        SharedArt.ButtonText(g, new Vec(210.0, 235.0), OpenCrafting, ModEntry.Instance.Localizations.Localize(["uiText", "btnOpenCrafting"]), null, null, inactive: false, __instance, null, null, null, null, autoFocus: true);
+        if (!__instance.GetIsActuallyCrafting() && !__instance.GetIsSpecialAttachSequence() && g.state.EnumerateAllArtifacts().OfType<CraftArtifact>().FirstOrDefault() is { } artifact && artifact.CraftsLeft > 0) SharedArt.ButtonText(g, new Vec(210.0, 230.0), OpenCrafting, ModEntry.Instance.Localizations.Localize(["uiText", "btnOpenCrafting"]), null, null, inactive: false, __instance, null, null, null, null, autoFocus: true);
     }
 
     private static void ShipUpgrades_OnMouseDown_Postfix(ShipUpgrades __instance, G g, Box b)
     {
         if (!b.key.HasValue) return;
         UIKey key = b.key.Value;
+        if (key.k == StableUK.shipUpgrades_continue && __instance.GetIsActuallyCrafting())
+        {
+            g.state.routeOverride = new ShipUpgrades() { outroTimer = 0.75 };
+        }
         if (key.k == StableUK.part && __instance.GetHeldAttachable() != null && !__instance.GetIsActuallyCrafting())
         {
             AttachableToPart attachable = __instance.GetHeldAttachable()!;
@@ -361,7 +365,9 @@ internal sealed class AttachableToPartManager
                 g.state.SetPlayerAttachables([.. g.state.GetPlayerAttachables().Where(a => a.UIKey() != key && a.UIKey() != __instance.GetHeldAttachable()!.UIKey()), item]);
                 g.state.ship.parts.ForEach(p => p.SetAttachables(p.GetAttachables().Where(a => a.UIKey() != key && a.UIKey() != __instance.GetHeldAttachable()!.UIKey()).ToList()));
                 g.state.route.SetHasCraftedHere(true);
-                g.CloseRoute(__instance);
+                if (g.state.EnumerateAllArtifacts().OfType<CraftArtifact>().FirstOrDefault() is { } artifact) artifact.CraftsLeft--;
+                g.state.routeOverride = new ShipUpgrades() { outroTimer = 0.75 };
+                //g.CloseRoute(__instance);
             }
             else if (g.state.GetPlayerAttachables().Any(a => a.UIKey() == key) || (g.state.ship.parts.Any(p => p.GetAttachables().Any(a => a.UIKey() == key)) && __instance.GetIsActuallyCrafting())) __instance.SetHeldAttachable(g.state.GetPlayerAttachables().Any(a => a.UIKey() == key) ? g.state.GetPlayerAttachables().First(a => a.UIKey() == key) : g.state.ship.parts.First(p => p.GetAttachables().Any(a => a.UIKey() == key)).GetAttachables().First(a => a.UIKey() == key));
             else
@@ -372,6 +378,11 @@ internal sealed class AttachableToPartManager
                 part.SetAttachables(part.GetAttachables().Where(a => a != attachable).ToList());
                 attachable.OnPartDetached(g.state, part);
             }
+        }
+        if (key.k == OpenCrafting)
+        {
+            Combat c = new();
+            g.state.routeOverride = new AItemCrafting().BeginWithRoute(g, g.state, c);
         }
     }
 

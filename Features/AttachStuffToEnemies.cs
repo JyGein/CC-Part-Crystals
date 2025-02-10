@@ -301,16 +301,22 @@ internal sealed class AttachStuffToEnemies
                 parts[4].SetAttachables([new MagentaFragment()]);
                 break;
             case Shopkeep:
-                parts[0].SetAttachables([new BM(), new YY()]);
-                parts[1].SetAttachables([new BM(), new YY()]);
-                parts[2].SetAttachables([new BM(), new YY()]);
+                parts[0].SetAttachables([new BM()]);
+                parts[1].SetAttachables([new BM()]);
+                parts[2].SetAttachables([new BM()]);
                 break;
             case LightFighter:
-                parts[0].SetAttachables([new OrangeFragment(), new CyanFragment()]);
+                List<(int, Fragment)> fragments5 = [(0, new OrangeFragment()), (0, new CyanFragment()), (1, new MagentaFragment()), (2, new RedFragment()), (3, new BlueFragment()), (3, new GreenFragment()), (4, new YellowFragment())];
+                fragments5 = fragments5.Shuffle(s.rngAi).Take(4).ToList();
+                foreach ((int i, Fragment frag) in fragments5)
+                {
+                    parts[i].SetAttachables([.. parts[i].GetAttachables(), frag]);
+                }
+                /*parts[0].SetAttachables([new OrangeFragment(), new CyanFragment()]);
                 parts[1].SetAttachables([new MagentaFragment()]);
                 parts[2].SetAttachables([new RedFragment()]);
                 parts[3].SetAttachables([new BlueFragment(), new GreenFragment()]);
-                parts[4].SetAttachables([new YellowFragment()]);
+                parts[4].SetAttachables([new YellowFragment()]);*/
                 break;
             default: //AKA unknown/unimplemented enemy
                 List<Fragment> fragments1 = GetFragments(s, c.otherShip, 4);

@@ -33,6 +33,10 @@
     "QuarterTempShield": {
       "name": "Quarter Temp Shield",
       "desc": "Combine 2 to gain 1 <c=status>HALF TEMP SHIELD</c>."
+    },
+    "QuarterShield": {
+      "name": "Quarter Shield",
+      "desc": "Combine 2 to gain 1 <c=status>HALF SHIELD</c>."
     }
   },
   "action": {

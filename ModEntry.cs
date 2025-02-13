@@ -15,6 +15,7 @@ using JyGein.PartCrystals.Features;
 using JyGein.PartCrystals.Fragments;
 using System.Runtime.CompilerServices;
 using JyGein.PartCrystals.Artifacts;
+using System.Collections.ObjectModel;
 
 namespace JyGein.PartCrystals;
 
@@ -40,9 +41,8 @@ internal class ModEntry : SimpleMod
     public IStatusEntry QuarterHeal;
     public Dictionary<string, ISpriteEntry> FragmentSprites;
     public Dictionary<string, ISpriteEntry> ItemSprites;
-    
-    public readonly List<Type> fragmentTypes =
-    [
+
+    public readonly ReadOnlyCollection<Type> fragmentTypes = new([
             typeof(BlueFragment),
             typeof(RedFragment),
             typeof(GreenFragment),
@@ -50,7 +50,7 @@ internal class ModEntry : SimpleMod
             typeof(MagentaFragment),
             typeof(CyanFragment),
             typeof(OrangeFragment)
-    ];
+    ]);
 
     public Dictionary<Type, Dictionary<Type, Type>> fragmentFragmentToItem = [];
 
@@ -295,4 +295,3 @@ internal class ModEntry : SimpleMod
     //    });
     //}
 }
-

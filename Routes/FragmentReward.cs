@@ -19,14 +19,14 @@ public class FragmentReward : Route, OnMouseDown
 
     public bool canSkip = true;
 
-    private ParticleSystem particles = new ParticleSystem
+    private readonly ParticleSystem particles = new()
     {
         blend = BlendMode.Screen,
-        gradient = new List<Color>
-        {
+        gradient =
+        [
             Colors.white,
             Colors.black
-        }
+        ]
     };
     public static readonly UK FragmentReward_FragmentUK = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
     public static readonly UK FragmentReward_Skip = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();

@@ -24,9 +24,9 @@ namespace JyGein.PartCrystals.Features;
 
 internal sealed class AttachableToPartManager
 {
-    public static UK OpenShipManagerButton = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
-    public static UK CodexItems = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
-    public static UK OpenCrafting = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
+    public static readonly UK OpenShipManagerButton = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
+    public static readonly UK CodexItems = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
+    public static readonly UK OpenCrafting = ModEntry.Instance.Helper.Utilities.ObtainEnumCase<UK>();
     public static string afterFragmentSequenceKey = ".zone_first";
     public AttachableToPartManager()
     {

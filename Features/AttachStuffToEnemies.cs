@@ -8,6 +8,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Extensions.Logging;
 
 namespace JyGein.PartCrystals.Features;
 
@@ -306,7 +308,15 @@ internal sealed class AttachStuffToEnemies
                 parts[2].SetAttachables([new BM()]);
                 break;
             case LightFighter:
-                List<(int, Fragment)> fragments5 = [(0, new OrangeFragment()), (0, new CyanFragment()), (1, new MagentaFragment()), (2, new RedFragment()), (3, new BlueFragment()), (3, new GreenFragment()), (4, new YellowFragment())];
+                List<(int, Fragment)> fragments5 = [
+                    (0, new OrangeFragment()),
+                    (0, new CyanFragment()), 
+                    (1, new MagentaFragment()),
+                    (2, new RedFragment()),
+                    (3, new BlueFragment()),
+                    (3, new GreenFragment()), 
+                    (4, new YellowFragment())
+                ];
                 fragments5 = fragments5.Shuffle(s.rngAi).Take(4).ToList();
                 foreach ((int i, Fragment frag) in fragments5)
                 {
@@ -330,11 +340,11 @@ internal sealed class AttachStuffToEnemies
     private static List<Fragment> GetFragments(State s, Ship ship, int amt = 7, bool noRed = false)
     {
         List<Fragment> list = [];
-        List<Type> fragmentTypes = ModEntry.Instance.fragmentTypes;
+        List<Type> fragmentTypes = [.. ModEntry.Instance.fragmentTypes];
         if (ship.GetMaxShield() <= 0) fragmentTypes.Remove(typeof(BlueFragment));
         if (ship.immovable) fragmentTypes.Remove(typeof(YellowFragment));
         if (noRed) fragmentTypes.Remove(typeof(RedFragment));
-        for (int i = 0; i < amt; i++) list.Add((Fragment)AccessTools.CreateInstance(fragmentTypes.Shuffle(s.rngShuffle).First()));
+        for (int i = 0; i < amt; i++) list.Add((Fragment)AccessTools.CreateInstance(fragmentTypes.Shuffle(s.rngAi).First()));
         return list;
     }
 

@@ -16,7 +16,7 @@ public class GB : Item
         base.OnPartHit(state, combat, part, damageDone);
         if (damageDone.hitHull)
         {
-            combat.QueueImmediate([new AHullMax { amount = 1, timer = 0 }, new AHeal { healAmount = 1 }]);
+            combat.QueueImmediate([new AHullMax { amount = 1, timer = 0, targetPlayer = playerOwned }, new AHeal { healAmount = 1, targetPlayer = playerOwned }]);
         }
     }
 
